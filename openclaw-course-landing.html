@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw完整课程体系 - 从零到一，打造你的专属AI助手</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+        
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header p {
+            font-size: 1.3em;
+            opacity: 0.95;
+        }
+        
+        .hero {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .comparison-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .comparison-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .course-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .course-stage {
+            margin: 40px 0;
+        }
+        
+        .course-stage h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .course-item {
+            background: #f8f9fa;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .course-item h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .course-meta {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .difficulty {
+            color: #ff6b6b;
+        }
+        
+        .pricing {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .pricing h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .pricing-card {
+            background: white;
+            color: #333;
+            padding: 40px 30px;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .pricing-card:hover {
+            transform: scale(1.05);
+        }
+        
+        .pricing-card.featured {
+            background: #ffd700;
+            transform: scale(1.05);
+        }
+        
+        .price {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        
+        .price-old {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.5em;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .cta-button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #ffd700 0%, #ffed4e 100%);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🚀 OpenClaw完整课程体系</h1>
+            <p>从零到一，打造你的专属AI助手生态</p>
+            <p style="margin-top: 20px; font-size: 1.1em;">面向开发者、产品经理、AI从业者的实战课程</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero">
+            <h2 style="text-align: center; color: #667eea; font-size: 2.5em; margin-bottom: 30px;">
+                为什么选择OpenClaw？
+            </h2>
+            
+            <div class="comparison">
+                <div class="comparison-card">
+                    <h3>❌ ChatGPT Plus</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>✗ 会话级记忆（有限）</li>
+                        <li>✗ 被动响应</li>
+                        <li>✗ 工具访问受限</li>
+                        <li>✗ 定制性受限</li>
+                        <li>✗ 数据在云端</li>
+                        <li>✗ 订阅$20/月</li>
+                        <li>✗ 仅GPT系列</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-card" style="border: 3px solid #667eea;">
+                    <h3>✅ OpenClaw</h3>
+                    <ul style="list-style: none; padding: 0;">
+                        <li>✓ 持久化文件系统</li>
+                        <li>✓ 24/7主动提醒</li>
+                        <li>✓ 真实操作工具</li>
+                        <li>✓ 完全自由定制</li>
+                        <li>✓ 本地控制</li>
+                        <li>✓ API费用$3-15/月</li>
+                        <li>✓ 支持所有主流模型</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔒</div>
+                <h3>本地优先</h3>
+                <p>数据完全掌控，隐私安全，端到端加密</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🌐</div>
+                <h3>开源透明</h3>
+                <p>代码公开可审查，社区驱动，快速迭代</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h3>多模型支持</h3>
+                <p>Claude/GPT/Gemini/DeepSeek任选</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>持久记忆</h3>
+                <p>永久记住你的偏好和历史</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>主动执行</h3>
+                <p>24/7后台运行，主动提醒</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🛠️</div>
+                <h3>真实工具</h3>
+                <p>真的发邮件、控制浏览器、执行代码</p>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">16</div>
+                <div class="stat-label">完整课程</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">30+</div>
+                <div class="stat-label">小时内容</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">99.9%</div>
+                <div class="stat-label">成本节省</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">10+</div>
+                <div class="stat-label">实战项目</div>
+            </div>
+        </div>
+
+        <div class="course-section">
+            <h2 style="text-align: center; color: #667eea; font-size: 2.5em; margin-bottom: 40px;">
+                📚 课程体系
+            </h2>
+
+            <div class="course-stage">
+                <h2>第一阶段：基础入门（4课时）</h2>
+                
+                <div class="course-item">
+                    <h3>第1课：OpenClaw是什么？为什么选择它？</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 45分钟</span>
+                        <span class="difficulty">⭐ 入门</span>
+                    </div>
+                    <p>了解OpenClaw的核心优势，5分钟快速体验，展示完整工作流</p>
+                </div>
+
+                <div class="course-item">
+                    <h3>第2课：快速上手 - 安装与基础配置</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 60分钟</span>
+                        <span class="difficulty">⭐ 入门</span>
+                    </div>
+                    <p>从零开始配置OpenClaw，掌握核心概念，配置国内模型</p>
+                </div>
+
+                <div class="course-item">
+                    <h3>第3课：核心功能 - 工具与技能系统</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 90分钟</span>
+                        <span class="difficulty">⭐⭐ 进阶</span>
+                    </div>
+                    <p>掌握内置工具和Skills系统，自动生成Word简历，处理PDF文档</p>
+                </div>
+
+                <div class="course-item">
+                    <h3>第4课：多渠道接入 - 让AI无处不在</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 90分钟</span>
+                        <span class="difficulty">⭐⭐ 进阶</span>
+                    </div>
+                    <p>配置飞书/Telegram机器人，实现多渠道消息同步</p>
+                </div>
+            </div>
+
+            <div class="course-stage">
+                <h2>第二阶段：进阶应用（5课时）</h2>
+                
+                <div class="course-item">
+                    <h3>第5课：模型选择策略 - 性价比最大化</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 90分钟</span>
+                        <span class="difficulty">⭐⭐ 进阶</span>
+                    </div>
+                    <p>掌握模型选择策略，<span class="highlight">节省86%成本</span></p>
+                </div>
+
+                <div class="course-item">
+                    <h3>第6课：记忆系统 - 让AI真正了解你</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 90分钟</span>
+                        <span class="difficulty">⭐⭐⭐ 高级</span>
+                    </div>
+                    <p>构建长期记忆系统，<span class="highlight">节省99.9%成本</span></p>
+                </div>
+
+                <div class="course-item">
+                    <h3>第7课：深度搜索 - 超越Google的信息获取</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 90分钟</span>
+                        <span class="difficulty">⭐⭐⭐ 高级</span>
+                    </div>
+                    <p>掌握web_search、browser工具，Codex Deep Search实战</p>
+                </div>
+
+                <div class="course-item">
+                    <h3>第8课：自动化工作流 - 解放双手</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 90分钟</span>
+                        <span class="difficulty">⭐⭐⭐ 高级</span>
+                    </div>
+                    <p>配置Heartbeat和Cron任务，自动处理邮件和生成报告</p>
+                </div>
+
+                <div class="course-item">
+                    <h3>第9课：文档处理 - 办公自动化</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 90分钟</span>
+                        <span class="difficulty">⭐⭐ 进阶</span>
+                    </div>
+                    <p>掌握PDF/Word/Excel处理，飞书文档集成</p>
+                </div>
+            </div>
+
+            <div class="course-stage">
+                <h2>第三阶段：高级进阶（4课时）</h2>
+                
+                <div class="course-item">
+                    <h3>第10课：Gateway深度配置 - 稳定性与安全</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 120分钟</span>
+                        <span class="difficulty">⭐⭐⭐⭐ 专家</span>
+                    </div>
+                    <p>配置systemd守护，实现崩溃自动修复，安全加固</p>
+                </div>
+
+                <div class="course-item">
+                    <h3>第11课：Sub-Agent与多Agent协作</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 120分钟</span>
+                        <span class="difficulty">⭐⭐⭐⭐ 专家</span>
+                    </div>
+                    <p>创建Sub-Agent，多Agent协作，Codex/Claude Code集成</p>
+                </div>
+
+                <div class="course-item">
+                    <h3>第12课：自定义Skill开发</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 120分钟</span>
+                        <span class="difficulty">⭐⭐⭐⭐ 专家</span>
+                    </div>
+                    <p>从零开发Skill，集成第三方API，发布到社区</p>
+                </div>
+
+                <div class="course-item">
+                    <h3>第13课：企业级部署与最佳实践</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 120分钟</span>
+                        <span class="difficulty">⭐⭐⭐⭐ 专家</span>
+                    </div>
+                    <p>生产级部署，监控运维，成本控制，团队协作</p>
+                </div>
+            </div>
+
+            <div class="course-stage">
+                <h2>第四阶段：实战项目（3课时）</h2>
+                
+                <div class="course-item">
+                    <h3>第14课：个人知识管理系统</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 120分钟</span>
+                        <span class="difficulty">⭐⭐⭐⭐ 专家</span>
+                    </div>
+                    <p>构建完整的知识管理系统，自动收集、分类、总结</p>
+                </div>
+
+                <div class="course-item">
+                    <h3>第15课：AI驱动的工作助手</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 120分钟</span>
+                        <span class="difficulty">⭐⭐⭐⭐ 专家</span>
+                    </div>
+                    <p>邮件自动处理，会议纪要生成，日报周报自动化</p>
+                </div>
+
+                <div class="course-item">
+                    <h3>第16课：智能客服系统</h3>
+                    <div class="course-meta">
+                        <span>⏱️ 120分钟</span>
+                        <span class="difficulty">⭐⭐⭐⭐⭐ 大师</span>
+                    </div>
+                    <p>多渠道接入，知识库构建，意图识别，人工转接</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="pricing">
+            <h2>💰 课程定价</h2>
+            <p style="font-size: 1.2em; margin-bottom: 40px;">选择最适合你的学习方案</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>基础入门</h3>
+                    <p>第1-4课</p>
+                    <div class="price">免费</div>
+                    <p>试看体验</p>
+                    <a href="#" class="cta-button" style="background: #28a745;">立即试看</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>进阶应用</h3>
+                    <p>第5-9课</p>
+                    <div class="price">¥299</div>
+                    <p>掌握核心技能</p>
+                    <a href="#" class="cta-button">立即购买</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>高级进阶</h3>
+                    <p>第10-13课</p>
+                    <div class="price">¥499</div>
+                    <p>企业级部署</p>
+                    <a href="#" class="cta-button">立即购买</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <h3>🔥 完整课程包</h3>
+                    <p>第1-16课</p>
+                    <div class="price">
+                        ¥999
+                        <span class="price-old">¥1197</span>
+                    </div>
+                    <p>节省¥198</p>
+                    <a href="#" class="cta-button" style="background: #ff6b6b;">立即抢购</a>
+                </div>
+            </div>
+
+            <div style="margin-top: 60px; padding: 40px; background: rgba(255,255,255,0.1); border-radius: 15px;">
+                <h3 style="font-size: 2em; margin-bottom: 20px;">🎉 限时优惠</h3>
+                <p style="font-size: 1.2em; margin-bottom: 15px;">
+                    <strong>早鸟优惠（前100名）：</strong>全套课程 ¥799（节省¥200）
+                </p>
+                <p style="font-size: 1.2em;">
+                    <strong>团购优惠（3人及以上）：</strong>¥699/人（节省¥300）
+                </p>
+            </div>
+        </div>
+
+        <div class="hero">
+            <h2 style="text-align: center; color: #667eea; font-size: 2.5em; margin-bottom: 30px;">
+                📈 学习效果
+            </h2>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">75%</div>
+                    <div class="stat-label">邮件处理时间节省</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">67%</div>
+                    <div class="stat-label">会议准备时间节省</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10h</div>
+                    <div class="stat-label">每周节省时间</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">80%+</div>
+                    <div class="stat-label">API成本节省</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin: 60px 0;">
+            <h2 style="color: white; font-size: 2.5em; margin-bottom: 30px;">
+                准备好开始了吗？
+            </h2>
+            <p style="color: white; font-size: 1.3em; margin-bottom: 40px;">
+                从零到一，打造你的专属AI助手生态！
+            </p>
+            <a href="#" class="cta-button" style="font-size: 1.5em; padding: 20px 60px;">
+                立即报名 🚀
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p style="font-size: 1.2em; margin-bottom: 20px;">
+                <strong>课程口号：</strong>
+            </p>
+            <p style="font-size: 1.5em; font-style: italic;">
+                从零到一，打造你的专属AI助手生态！<br>
+                不只是学习工具，更是掌握AI时代的生存技能！
+            </p>
+            <p style="margin-top: 40px; opacity: 0.8;">
+                © 2026 OpenClaw课程 | 联系我们：[微信/邮箱]
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

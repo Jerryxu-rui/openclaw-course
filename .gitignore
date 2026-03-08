@@ -1,0 +1,53 @@
+# OpenClaw workspace files
+.openclaw/
+*.jsonl
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+
+# Node modules
+node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+
+# Sensitive data
+*.env
+.env.local
+**/gateway.env
+**/*token*
+**/*key*
+**/*secret*
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# Media files (too large)
+*.mp4
+*.avi
+*.mov
+*.jpg
+*.jpeg
+*.png
+*.gif
