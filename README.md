@@ -58,6 +58,23 @@
 
 14. **个人知识管理系统** - 120分钟 | ⭐⭐⭐⭐
 15. **AI驱动的工作助手** - 120分钟 | ⭐⭐⭐⭐
+
+## 🔧 Skills指南
+
+### [OpenClaw Skills完全指南](skills-guide.md)
+
+- 🛡️ **安全防护** - Skill Vetter、Security Scanner、100/3法则
+- ⭐ **必装Top 5** - 新手起步必备
+- 📦 **8大分类** - AI自进化、开发者效率、搜索研究等
+- 🌟 **推荐仓库** - Anthropic、Apify、NoizAI、Marketing
+- 📖 **Agent Reach** - 已安装在 ~/.openclaw/skills/agent-reach/
+
+**快速开始：**
+```bash
+# 安装必备5件套
+clawhub install skill-vetter capability-evolver gog summarize agent-browser
+```
+
 16. **智能客服系统** - 120分钟 | ⭐⭐⭐⭐⭐
 
 ---
