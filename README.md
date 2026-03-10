@@ -140,27 +140,29 @@ npx skills add vercel-labs/agent-browser --skill agent-browser -g -y
 openclaw-course/
 ├── README.md                           # 本文件
 ├── OpenClaw课程规划.md                  # 完整课程大纲
-├── openclaw-course-promo.md            # 宣传文档
+├── 课程宣传文档.md                      # 宣传文档
 ├── openclaw-course-landing.html        # 宣传页面
-├── case-study-agentic-finance.md       # 金融实战案例1：智能体金融
-├── case-study-stock-analysis.md        # 金融实战案例2：智能股票分析
-├── lesson01-openclaw-introduction.md   # 第1课：OpenClaw介绍
-├── lesson02-quick-start-installation.md # 第2课：快速安装
-├── lesson03-core-features-tools-skills.md # 第3课：核心功能
-├── lesson04-multi-channel-integration.md # 第4课：多渠道接入
-├── lesson05-model-selection-strategy.md # 第5课：模型选择
-├── lesson06-memory-system.md           # 第6课：记忆系统
-├── lesson07-deep-search.md             # 第7课：深度搜索
-├── lesson08-automation-workflow.md     # 第8课：自动化工作流
-├── lesson09-document-processing.md     # 第9课：文档处理
-├── lesson10-gateway-configuration.md   # 第10课：Gateway配置
-├── lesson11-subagent-multiagent.md     # 第11课：Sub-Agent协作
-├── lesson12-custom-skill-development.md # 第12课：自定义Skill
-├── lesson13-enterprise-deployment.md   # 第13课：企业部署
-├── lesson14-project-knowledge-management.md # 第14课：知识管理
-├── lesson15-ai-work-assistant.md       # 第15课：工作助手
-├── lesson16-intelligent-customer-service.md # 第16课：智能客服
-├── skills-guide.md                     # Skills指南
+├── 金融实战案例1-智能体金融.md          # 金融实战案例1：智能体金融
+├── 金融实战案例2-智能股票分析.md        # 金融实战案例2：智能股票分析
+├── 第1课-OpenClaw介绍.md               # 第1课：OpenClaw介绍
+├── 第2课-快速安装配置.md                # 第2课：快速安装配置
+├── 第3课-核心功能与技能系统.md          # 第3课：核心功能与技能系统
+├── 第4课-多渠道接入.md                  # 第4课：多渠道接入
+├── 第5课-模型选择策略.md                # 第5课：模型选择策略
+├── 第6课-记忆系统.md                    # 第6课：记忆系统
+├── 第7课-深度搜索.md                    # 第7课：深度搜索
+├── 第8课-自动化工作流.md                # 第8课：自动化工作流
+├── 第9课-文档处理.md                    # 第9课：文档处理
+├── 第10课-Gateway配置.md               # 第10课：Gateway配置
+├── 第11课-多Agent协作.md               # 第11课：多Agent协作
+├── 第12课-自定义Skill开发.md           # 第12课：自定义Skill开发
+├── 第13课-企业级部署.md                 # 第13课：企业级部署
+├── 第14课-个人知识管理系统.md           # 第14课：个人知识管理系统
+├── 第15课-AI工作助手.md                # 第15课：AI工作助手
+├── 第16课-智能客服系统.md              # 第16课：智能客服系统
+├── Skills指南-v1.md                    # Skills指南 v1.0
+├── Skills指南-v2.md                    # Skills指南 v2.0
+├── Obsidian-Notion集成教程.md          # Obsidian-Notion集成教程
 └── memory/                             # 开发日志
     ├── 2026-03-08.md
     └── 2026-03-09.md

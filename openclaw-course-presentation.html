@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw完整课程体系 - 可翻页演示版</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #050508;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        .slides-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            padding: 60px 80px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, #050508 0%, #0a0a1a 50%, #0d1528 100%);
+            overflow: hidden;
+            opacity: 0;
+            transform: translateX(100px) scale(0.95);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+        
+        .slide.prev {
+            transform: translateX(-100px) scale(0.95);
+            opacity: 0;
+        }
+        
+        /* 粒子背景效果 */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(102, 126, 234, 0.6);
+            border-radius: 50%;
+            animation: float 15s infinite;
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.8);
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 封面样式 */
+        .cover-slide {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(135deg, #020205 0%, #0a0a1a 30%, #1a0a2e 60%, #0d1a2e 100%);
+        }
+        
+        .cover-slide::before {
+            content: '';
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, rgba(118, 75, 162, 0.2) 30%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse-glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        .title-main {
+            font-size: 4.5em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .title-sub {
+            font-size: 1.8em;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .title-tagline {
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.6);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 内容样式 */
+        .slide-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .slide-title {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .slide-subtitle {
+            font-size: 1.5em;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+        }
+        
+        /* 课程特色网格 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            border-color: rgba(102, 126, 234, 0.4);
+        }
+        
+        .feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        
+        .feature-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        .feature-desc {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+        
+        /* 课程体系表格 */
+        .course-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 40px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .course-table th {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            padding: 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #fff;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .course-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .course-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .course-table tr:hover td {
+            background: rgba(102, 126, 234, 0.1);
+            color: #fff;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .badge-completed {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .badge-inprogress {
+            background: rgba(234, 179, 8, 0.15);
+            color: #facc15;
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+        
+        /* 金融案例展示 */
+        .case-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+        
+        .case-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            padding: 35px;
+            transition: all 0.3s ease;
+        }
+        
+        .case-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .case-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .case-subtitle {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+        }
+        
+        .case-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+        
+        .case-features li {
+            padding: 8px 0;
+            color: rgba(255, 255, 255, 0.7);
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .case-features li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4ade80;
+            font-weight: bold;
+        }
+        
+        /* 导航指示器 */
+        .slide-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .indicator-dot.active {
+            background: #667eea;
+            transform: scale(1.3);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.8);
+        }
+        
+        /* 操作提示 */
+        .hint {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9em;
+            z-index: 100;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 20px;
+            }
+            
+            .title-main {
+                font-size: 2.5em;
+            }
+            
+            .slide-title {
+                font-size: 2em;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .case-showcase {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slides-container">
+        <!-- 粒子背景 -->
+        <div class="particles" id="particles"></div>
+        
+        <!-- 幻灯片1：封面 -->
+        <div class="slide cover-slide active" id="slide1">
+            <h1 class="title-main">OpenClaw完整课程体系</h1>
+            <p class="title-sub">从零到一，打造你的专属AI助手生态</p>
+            <p class="title-tagline">16课详细教案 + 2大金融实战案例</p>
+        </div>
+        
+        <!-- 幻灯片2：课程简介 -->
+        <div class="slide" id="slide2">
+            <div class="slide-content">
+                <h2 class="slide-title">🎯 为什么选择OpenClaw？</h2>
+                <p class="slide-subtitle">面向开发者、产品经理、AI从业者的实战课程</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3 class="feature-title">本地优先</h3>
+                        <p class="feature-desc">数据完全掌控，隐私安全，无需担心数据泄露</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🔓</div>
+                        <h3 class="feature-title">开源透明</h3>
+                        <p class="feature-desc">代码公开，可审查，社区驱动持续改进</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3 class="feature-title">多模型支持</h3>
+                        <p class="feature-desc">Claude/GPT/Gemini/DeepSeek任选，灵活切换</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🧠</div>
+                        <h3 class="feature-title">持久记忆</h3>
+                        <p class="feature-desc">永久记住你的偏好和历史，真正了解你</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 幻灯片3：课程体系 -->
+        <div class="slide" id="slide3">
+            <div class="slide-content">
+                <h2 class="slide-title">📚 课程体系（16课完整）</h2>
+                <p class="slide-subtitle">从基础入门到实战项目的完整学习路径</p>
+                
+                <table class="course-table">
+                    <thead>
+                        <tr>
+                            <th>阶段</th>
+                            <th>课程</th>
+                            <th>时长</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="4"><strong>第一阶段：基础入门</strong></td>
+                            <td>第1课：OpenClaw介绍</td>
+                            <td>45分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>第2课：快速安装配置</td>
+                            <td>60分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>第3课：核心功能与技能系统</td>
+                            <td>90分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>第4课：多渠道接入</td>
+                            <td>90分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        
+                        <tr>
+                            <td rowspan="5"><strong>第二阶段：进阶应用</strong></td>
+                            <td>第5课：模型选择策略</td>
+                            <td>90分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>第6课：记忆系统</td>
+                            <td>90分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>第7课：深度搜索</td>
+                            <td>90分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>第8课：自动化工作流</td>
+                            <td>90分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>第9课：文档处理</td>
+                            <td>90分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        
+                        <tr>
+                            <td rowspan="4"><strong>第三阶段：高级进阶</strong></td>
+                            <td>第10课：Gateway配置</td>
+                            <td>90分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>第11课：多Agent协作</td>
+                            <td>90分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>第12课：自定义Skill开发</td>
+                            <td>90分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>第13课：企业级部署</td>
+                            <td>90分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        
+                        <tr>
+                            <td rowspan="3"><strong>第四阶段：实战项目</strong></td>
+                            <td>第14课：个人知识管理系统</td>
+                            <td>120分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>第15课：AI工作助手</td>
+                            <td>120分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                        <tr>
+                            <td>第16课：智能客服系统</td>
+                            <td>120分钟</td>
+                            <td><span class="badge badge-completed">已完成</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 幻灯片4：金融实战案例 -->
+        <div class="slide" id="slide4">
+            <div class="slide-content">
+                <h2 class="slide-title">🎯 金融实战案例系列</h2>
+                <p class="slide-subtitle">两大重量级金融科技实战项目</p>
+                
+                <div class="case-showcase">
+                    <div class="case-card">
+                        <h3 class="case-title">案例1：智能体金融</h3>
+                        <p class="case-subtitle">高频交易与区块链预测市场</p>
+                        <ul class="case-features">
+                            <li>Polymarket预测市场分析</li>
+                            <li>实时交易信号生成</li>
+                            <li>安全风险控制系统</li>
+                            <li>自动化套利策略</li>
+                            <li>区块链数据集成</li>
+                        </ul>
+                        <p><strong>技术栈：</strong> PolyClaw插件 + 区块链 + 高频交易算法</p>
+                    </div>
+                    
+                    <div class="case-card">
+                        <h3 class="case-title">案例2：智能股票分析</h3>
+                        <p class="case-subtitle">传统股票市场投资分析系统</p>
+                        <ul class="case-features">
+                            <li>双数据源整合（Tushare + Akshare）</li>
+                            <li>技术面 + 基本面 + 风险评估</li>
+                            <li>自动化报告生成系统</li>
+                            <li>实时监控与预警</li>
+                            <li>投资知识管理系统</li>
+                        </ul>
+                        <p><strong>课程整合：</strong> 第8、9、14课深度整合</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 幻灯片5：成本优势 -->
+        <div class="slide" id="slide5">
+            <div class="slide-content">
+                <h2 class="slide-title">💰 成本优势与效率提升</h2>
+                <p class="slide-subtitle">通过技术优化实现显著的成本节省</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3 class="feature-title">成本对比</h3>
+                        <p class="feature-desc">
+                            <strong>优化前：</strong> ~$270/月<br>
+                            <strong>优化后：</strong> ~$37.96/月<br>
+                            <strong>节省：</strong> 86%
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">效率提升</h3>
+                        <p class="feature-desc">
+                            <strong>邮件处理：</strong> 节省75%时间<br>
+                            <strong>会议准备：</strong> 节省67%时间<br>
+                            <strong>每周节省：</strong> 10+小时
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🧠</div>
+                        <h3 class="feature-title">记忆蒸馏技术</h3>
+                        <p class="feature-desc">
+                            <strong>上下文压缩：</strong> 40-50%<br>
+                            <strong>成本节省：</strong> 99.9%<br>
+                            <strong>响应速度：</strong> 提升3倍
+                        </p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🎓</div>
+                        <h3 class="feature-title">学习效果</h3>
+                        <p class="feature-desc">
+                            <strong>知识留存：</strong> 提高3倍<br>
+                            <strong>实战能力：</strong> 立即应用<br>
+                            <strong>职业发展：</strong> 金融科技核心竞争力
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 幻灯片6：学习路径 -->
+        <div class="slide" id="slide6">
+            <div class="slide-content">
+                <h2 class="slide-title">🚀 学习路径推荐</h2>
+                <p class="slide-subtitle">根据你的需求选择最适合的学习路径</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3 class="feature-title">路径1：快速上手</h3>
+                        <p class="feature-desc"><strong>适合：</strong> 个人用户、初学者</p>
+                        <ul class="case-features">
+                            <li>第1-4课：基础入门</li>
+                            <li>第5-6课：核心功能</li>
+                            <li>第8课：自动化工作流</li>
+                            <li>第14课：知识管理项目</li>
+                        </ul>
+                        <p><strong>目标：</strong> 快速掌握OpenClaw基础应用</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3 class="feature-title">路径2：深度掌握</h3>
+                        <p class="feature-desc"><strong>适合：</strong> 开发者、技术爱好者</p>
+                        <ul class="case-features">
+                            <li>完整学习第1-13课</li>
+                            <li>选择1-2个实战项目</li>
+                            <li>掌握自定义Skill开发</li>
+                            <li>理解系统架构设计</li>
+                        </ul>
+                        <p><strong>目标：</strong> 成为OpenClaw专家</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3 class="feature-title">路径3：金融科技专精</h3>
+                        <p class="feature-desc"><strong>适合：</strong> 金融从业者、投资者</p>
+                        <ul class="case-features">
+                            <li>第7课：深度搜索（案例1）</li>
+                            <li>第8、9课：自动化与文档处理</li>
+                            <li>第14课：知识管理（案例2）</li>
+                            <li>两大金融实战案例</li>
+                        </ul>
+                        <p><strong>目标：</strong> 掌握AI在金融领域的应用</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 幻灯片7：开始学习 -->
+        <div class="slide cover-slide" id="slide7">
+            <div class="slide-content" style="text-align: center;">
+                <h1 class="title-main">开始你的OpenClaw之旅</h1>
+                <p class="title-sub" style="margin-bottom: 40px;">16课完整课程 + 2大金融实战案例</p>
+                
+                <div style="display: flex; gap: 20px; justify-content: center; margin-top: 40px;">
+                    <a href="https://github.com/Jerryxu-rui/openclaw-course" 
+                       style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                              color: white; padding: 15px 30px; border-radius: 50px; 
+                              text-decoration: none; font-weight: 600; font-size: 1.1em;
+                              transition: all 0.3s ease;">
+                        📁 访问GitHub仓库
+                    </a>
+                    
+                    <a href="README.md" 
+                       style="background: rgba(255, 255, 255, 0.1); 
+                              color: white; padding: 15px 30px; border-radius: 50px; 
+                              text-decoration: none; font-weight: 600; font-size: 1.1em;
+                              border: 1px solid rgba(102, 126, 234, 0.3);
+                              transition: all 0.3s ease;">
+                        📚 查看课程文档
+                    </a>
+                </div>
+                
+                <div style="margin-top: 60px; color: rgba(255, 255, 255, 0.6);">
+                    <p>🎉 课程状态：全部完成，可以开始学习！</p>
+                    <p>📅 完成时间：2026年3月10日</p>
+                    <p>📖 总字数：约150,000字</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 导航指示器 -->
+        <div class="slide-indicator" id="indicator">
+            <div class="indicator-dot active" data-slide="0"></div>
+            <div class="indicator-dot" data-slide="1"></div>
+            <div class="indicator-dot" data-slide="2"></div>
+            <div class="indicator-dot" data-slide="3"></div>
+            <div class="indicator-dot" data-slide="4"></div>
+            <div class="indicator-dot" data-slide="5"></div>
+            <div class="indicator-dot" data-slide="6"></div>
+        </div>
+        
+        <!-- 操作提示 -->
+        <div class="hint">
+            ← → 键翻页 · 空格键下一张 · 点击左右半屏切换
+        </div>
+    </div>
+
+    <script>
+        // 初始化变量
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const indicators = document.querySelectorAll('.indicator-dot');
+        const totalSlides = slides.length;
+        
+        // 创建粒子背景
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // 随机位置
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                
+                // 随机大小
+                const size = 2 + Math.random() * 4;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // 随机动画延迟
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                
+                // 随机颜色
+                const hue = 240 + Math.random() * 60; // 蓝色到紫色
+                particle.style.background = `hsla(${hue}, 80%, 70%, ${0.3 + Math.random() * 0.4})`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // 显示指定幻灯片
+        function showSlide(index) {
+            // 隐藏所有幻灯片
+            slides.forEach(slide => {
+                slide.classList.remove('active', 'prev');
+            });
+            
+            // 显示当前幻灯片
+            slides[index].classList.add('active');
+            
+            // 更新指示器
+            indicators.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+            
+            currentSlide = index;
+        }
+        
+        // 下一张幻灯片
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                // 标记当前幻灯片为prev
+                slides[currentSlide].classList.add('prev');
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+        
+        // 上一张幻灯片
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+        
+        // 键盘控制
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+        
+        // 点击控制
+        document.addEventListener('click', (e) => {
+            const clickX = e.clientX;
+            const windowWidth = window.innerWidth;
+            
+            // 点击右侧进入下一张
+            if (clickX > windowWidth / 2) {
+                nextSlide();
+            } 
+            // 点击左侧返回上一张
+            else {
+                prevSlide();
+            }
+        });
+        
+        // 指示器点击
+        indicators.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showSlide(index);
+            });
+        });
+        
+        // 触摸滑动控制
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // 向左滑动，下一张
+                nextSlide();
+            } else if (touchEndX > touchStartX + swipeThreshold) {
+                // 向右滑动，上一张
+                prevSlide();
+            }
+        }
+        
+        // 初始化
+        createParticles();
+        showSlide(0);
+        
+        // 自动播放（可选）
+        // setInterval(nextSlide, 10000); // 每10秒自动播放
+    </script>
+</body>
+</html>
