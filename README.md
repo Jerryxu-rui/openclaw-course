@@ -61,19 +61,35 @@
 
 ## 🔧 Skills指南
 
-### [OpenClaw Skills完全指南](skills-guide.md)
+### 📚 [OpenClaw Skills完全指南 2.0](skills-guide-v2.md) ⭐ 最新
 
-- 🛡️ **安全防护** - Skill Vetter、Security Scanner、100/3法则
-- ⭐ **必装Top 5** - 新手起步必备
-- 📦 **8大分类** - AI自进化、开发者效率、搜索研究等
-- 🌟 **推荐仓库** - Anthropic、Apify、NoizAI、Marketing
-- 📖 **Agent Reach** - 已安装在 ~/.openclaw/skills/agent-reach/
+**13,000+ Skills生态全景图 | 从安全防护到实战应用**
+
+- 🛡️ **安全第一** - ClawHavoc事件警示 + 防护三件套
+- ⭐ **新手必装Top 5** - 一键安装命令
+- 📦 **8大分类详解** - 30+核心Skills深度解析
+  - AI自进化（Capability Evolver等）
+  - 开发者效率（GitHub/Gog/Vercel等）
+  - 搜索与研究（Agent Browser/Exa等）
+  - 文档管理（Obsidian/PDF等）
+  - 多媒体创作（fal-ai/ElevenLabs等）
+  - 工作流编排（Clawflows等）
+  - 日常生活（Remind-me/Weather等）
+  - 写作内容（Humanize AI Text等）
+- 🌟 **推荐仓库** - Anthropic/Apify/NoizAI/Vercel
+- 🎯 **实战案例** - Obsidian同步/浏览器测试/语音交互
 
 **快速开始：**
 ```bash
 # 安装必备5件套
-clawhub install skill-vetter capability-evolver gog summarize agent-browser
+npx skills add skill-vetter -g -y
+npx skills add capability-evolver -g -y
+npx skills add gog -g -y
+npx skills add summarize -g -y
+npx skills add vercel-labs/agent-browser --skill agent-browser -g -y
 ```
+
+### 📖 [Skills指南 v1.0](skills-guide.md)（旧版）
 
 16. **智能客服系统** - 120分钟 | ⭐⭐⭐⭐⭐
 

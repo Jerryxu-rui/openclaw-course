@@ -99,6 +99,487 @@ nano ~/.openclaw/workspace/HEARTBEAT.md
 - 心跳4：检查天气 + 系统
 ```
 
+---
+
+## 第二部分：实战案例 - 智能股票分析自动化系统（45分钟）
+
+### 2.1 案例背景
+
+#### 业务需求
+作为投资者，需要：
+1. 每日获取关注的股票数据
+2. 自动分析技术指标和基本面
+3. 生成投资分析报告
+4. 实时监控风险并预警
+
+#### 传统方式的问题
+- 手动操作耗时耗力
+- 容易错过重要信息
+- 分析结果主观性强
+- 无法实时监控
+
+#### OpenClaw解决方案
+通过自动化工作流实现：
+- 定时数据获取和分析
+- 自动报告生成
+- 实时风险监控
+- 多渠道预警通知
+
+### 2.2 系统架构设计
+
+```
+智能股票分析自动化系统
+├── 数据获取层
+│   ├── Tushare API（专业数据）
+│   └── Akshare（免费数据）
+├── 分析处理层
+│   ├── 技术分析模块
+│   ├── 基本面分析模块
+│   └── 风险评估模块
+├── 自动化调度层
+│   ├── Heartbeat定时任务
+│   ├── Cron作业调度
+│   └── 实时监控循环
+├── 输出报告层
+│   ├── Markdown报告
+│   ├── Word文档
+│   └── 可视化图表
+└── 通知预警层
+    ├── 飞书通知
+    ├── Telegram推送
+    └── 邮件提醒
+```
+
+### 2.3 Heartbeat配置实现
+
+#### 每日分析任务配置
+```markdown
+# ~/.openclaw/workspace/HEARTBEAT.md
+
+## 智能股票分析系统
+
+### 每日任务（交易日9:00执行）
+1. 获取关注的股票数据
+   - 贵州茅台 (600519.SH)
+   - 五粮液 (000858.SZ)
+   - 招商银行 (600036.SH)
+   - 中国平安 (601318.SH)
+
+2. 执行技术分析
+   - 计算RSI、MACD、布林带
+   - 生成交易信号
+
+3. 执行基本面分析
+   - 财务比率分析
+   - 估值计算
+   - 风险检测
+
+4. 生成投资晨报
+   - 汇总分析结果
+   - 生成Markdown报告
+   - 转换为Word格式
+
+5. 发送通知
+   - 飞书群推送报告
+   - Telegram发送摘要
+```
+
+#### 实时监控配置
+```markdown
+### 实时监控（每30分钟执行）
+1. 监控价格异常
+   - 检查价格波动超过5%
+   - 检测成交量异常放大
+
+2. 监控技术指标
+   - RSI超买超卖预警
+   - MACD金叉死叉信号
+
+3. 风险预警
+   - 达到止损条件提醒
+   - 重大新闻事件监控
+```
+
+### 2.4 Cron任务配置
+
+#### 定时任务脚本
+```bash
+# ~/.openclaw/workspace/scripts/daily_stock_analysis.sh
+#!/bin/bash
+
+# 配置
+STOCK_LIST="600519.SH 000858.SZ 600036.SH 601318.SH"
+ANALYSIS_DIR="/home/jerryxu/.openclaw/stock-analysis/reports"
+DATE=$(date +%Y%m%d)
+
+echo "开始执行每日股票分析: $DATE"
+
+# 1. 创建报告目录
+mkdir -p $ANALYSIS_DIR/$DATE
+
+# 2. 分析每只股票
+for STOCK in $STOCK_LIST; do
+    echo "分析: $STOCK"
+    
+    # 获取数据
+    python ~/.openclaw/stock-analysis/scripts/data_fetcher.py \
+        --code $STOCK \
+        --output $ANALYSIS_DIR/$DATE/${STOCK}_data.json
+    
+    # 技术分析
+    python ~/.openclaw/stock-analysis/scripts/technical_analyzer.py \
+        --input $ANALYSIS_DIR/$DATE/${STOCK}_data.json \
+        --output $ANALYSIS_DIR/$DATE/${STOCK}_technical.json
+    
+    # 基本面分析
+    python ~/.openclaw/stock-analysis/scripts/fundamental_analyzer.py \
+        --input $ANALYSIS_DIR/$DATE/${STOCK}_data.json \
+        --output $ANALYSIS_DIR/$DATE/${STOCK}_fundamental.json
+    
+    # 风险评估
+    python ~/.openclaw/stock-analysis/scripts/risk_assessor.py \
+        --technical $ANALYSIS_DIR/$DATE/${STOCK}_technical.json \
+        --fundamental $ANALYSIS_DIR/$DATE/${STOCK}_fundamental.json \
+        --output $ANALYSIS_DIR/$DATE/${STOCK}_risk.json
+done
+
+# 3. 生成汇总报告
+python ~/.openclaw/stock-analysis/scripts/report_generator.py \
+    --date $DATE \
+    --dir $ANALYSIS_DIR/$DATE \
+    --output $ANALYSIS_DIR/$DATE/daily_report.md
+
+# 4. 发送通知
+python ~/.openclaw/stock-analysis/scripts/notification_sender.py \
+    --file $ANALYSIS_DIR/$DATE/daily_report.md \
+    --title "每日投资晨报 $DATE"
+
+echo "每日股票分析完成"
+```
+
+#### Cron配置
+```bash
+# 编辑crontab
+crontab -e
+
+# 添加以下配置
+# 每个交易日早上9:00执行分析
+0 9 * * 1-5 /home/jerryxu/.openclaw/workspace/scripts/daily_stock_analysis.sh >> /tmp/stock_analysis.log 2>&1
+
+# 每30分钟执行实时监控
+*/30 * * * * /home/jerryxu/.openclaw/workspace/scripts/stock_monitor.sh >> /tmp/stock_monitor.log 2>&1
+
+# 每周五下午生成周报
+0 17 * * 5 /home/jerryxu/.openclaw/workspace/scripts/weekly_summary.sh >> /tmp/stock_weekly.log 2>&1
+```
+
+### 2.5 实时监控系统实现
+
+#### 监控脚本
+```python
+# ~/.openclaw/workspace/scripts/stock_monitor.py
+import time
+import json
+from datetime import datetime
+
+class StockMonitor:
+    def __init__(self, watchlist, alert_channels):
+        self.watchlist = watchlist
+        self.alert_channels = alert_channels
+        self.monitoring = True
+    
+    def start_monitoring(self, interval=1800):  # 30分钟
+        """启动监控"""
+        print(f"股票监控系统启动，监控间隔: {interval}秒")
+        
+        while self.monitoring:
+            for stock in self.watchlist:
+                self.check_stock(stock)
+            
+            time.sleep(interval)
+    
+    def check_stock(self, stock):
+        """检查股票状态"""
+        # 获取实时数据
+        data = self.get_realtime_data(stock['code'])
+        
+        # 检查价格异常
+        if self.is_price_anomaly(stock, data):
+            self.send_alert(stock, "价格异常波动", data)
+        
+        # 检查成交量异常
+        if self.is_volume_anomaly(stock, data):
+            self.send_alert(stock, "成交量异常放大", data)
+        
+        # 检查技术指标风险
+        if self.is_technical_risk(stock, data):
+            self.send_alert(stock, "技术指标风险", data)
+    
+    def send_alert(self, stock, alert_type, data):
+        """发送预警"""
+        message = f"""
+🚨 股票监控预警
+📈 股票: {stock['name']} ({stock['code']})
+⚠️ 预警类型: {alert_type}
+💰 当前价格: ¥{data['price']}
+📊 涨跌幅: {data['change_percent']}%
+⏰ 时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+"""
+        
+        # 发送到配置的渠道
+        for channel in self.alert_channels:
+            if channel['type'] == 'feishu':
+                self.send_feishu_alert(channel, message)
+            elif channel['type'] == 'telegram':
+                self.send_telegram_alert(channel, message)
+```
+
+#### 监控配置
+```json
+{
+  "monitoring": {
+    "watchlist": [
+      {
+        "code": "600519.SH",
+        "name": "贵州茅台",
+        "stop_loss": 1500,
+        "take_profit": 2000
+      },
+      {
+        "code": "000858.SZ",
+        "name": "五粮液",
+        "stop_loss": 120,
+        "take_profit": 180
+      }
+    ],
+    "alert_channels": [
+      {
+        "type": "feishu",
+        "webhook": "https://open.feishu.cn/open-apis/bot/v2/hook/xxx"
+      },
+      {
+        "type": "telegram",
+        "bot_token": "xxx",
+        "chat_id": "-100xxx"
+      }
+    ],
+    "check_interval": 1800,
+    "price_alert_threshold": 0.05,
+    "volume_alert_threshold": 3.0
+  }
+}
+```
+
+### 2.6 自动化报告生成
+
+#### 报告生成脚本
+```python
+# ~/.openclaw/workspace/scripts/report_generator.py
+import json
+from datetime import datetime
+
+class ReportGenerator:
+    def generate_daily_report(self, analysis_data, date):
+        """生成每日报告"""
+        report = f"""# 每日投资晨报 - {date}
+
+## 市场概况
+- 分析时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+- 关注股票: {len(analysis_data)} 只
+- 整体市场情绪: {self.get_market_sentiment(analysis_data)}
+
+## 个股分析
+
+"""
+        
+        for stock in analysis_data:
+            report += self.generate_stock_section(stock)
+        
+        report += """
+## 投资建议
+
+### 今日操作策略
+1. **重点关注**: 技术指标良好且估值合理的股票
+2. **风险控制**: 设置止损位，控制单只股票仓位
+3. **机会把握**: 关注超跌反弹机会
+
+### 风险提示
+- 市场波动风险
+- 个股基本面变化风险
+- 系统性风险
+
+## 免责声明
+本报告由自动化系统生成，仅供参考，不构成投资建议。
+"""
+        
+        return report
+    
+    def generate_stock_section(self, stock_data):
+        """生成个股分析部分"""
+        return f"""
+### {stock_data['name']} ({stock_data['code']})
+
+#### 技术分析
+- **当前价格**: ¥{stock_data['price']}
+- **RSI**: {stock_data['rsi']} ({self.get_rsi_status(stock_data['rsi'])})
+- **MACD**: {stock_data['macd_signal']}
+- **布林带位置**: {self.get_bollinger_position(stock_data)}
+
+#### 基本面分析
+- **PE**: {stock_data['pe']} (行业平均: {stock_data['industry_pe']})
+- **ROE**: {stock_data['roe']}%
+- **股息率**: {stock_data['dividend_yield']}%
+
+#### 风险评估
+- **风险等级**: {stock_data['risk_level']}
+- **主要风险**: {', '.join(stock_data['risks'][:3])}
+
+#### 操作建议
+{stock_data['recommendation']}
+"""
+
+#### 报告自动化流程
+```bash
+# 报告生成和发送流程
+1. 数据收集 → 2. 分析处理 → 3. 报告生成 → 4. 格式转换 → 5. 多渠道发送
+
+# 具体实现
+python collect_data.py          # 收集数据
+python analyze_stocks.py        # 分析处理
+python generate_report.py       # 生成报告
+pandoc report.md -o report.docx # 转换为Word
+python send_notifications.py    # 发送通知
+```
+
+### 2.7 错误处理与日志管理
+
+#### 错误处理策略
+```python
+class StockAnalysisErrorHandler:
+    def handle_api_error(self, error):
+        """处理API错误"""
+        if "rate limit" in str(error).lower():
+            print("API调用频率限制，等待重试...")
+            time.sleep(60)
+            return True  # 重试
+        elif "network" in str(error).lower():
+            print("网络错误，检查连接...")
+            return False  # 不重试
+        else:
+            print(f"未知API错误: {error}")
+            return False
+    
+    def handle_data_error(self, error):
+        """处理数据错误"""
+        if "missing data" in str(error).lower():
+            print("数据缺失，使用默认值...")
+            return self.use_default_values()
+        else:
+            print(f"数据错误: {error}")
+            return None
+    
+    def handle_report_error(self, error):
+        """处理报告生成错误"""
+        print(f"报告生成错误: {error}")
+        # 发送错误通知
+        self.send_error_notification(error)
+        return None
+```
+
+#### 日志管理配置
+```python
+import logging
+
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('/var/log/openclaw/stock_analysis.log'),
+        logging.StreamHandler()
+    ]
+)
+
+logger = logging.getLogger('stock_analysis')
+
+# 使用示例
+logger.info("开始执行每日股票分析")
+logger.warning("API调用接近限制")
+logger.error("数据获取失败", exc_info=True)
+```
+
+### 2.8 性能优化
+
+#### 缓存策略
+```python
+import redis
+import pickle
+
+class DataCache:
+    def __init__(self):
+        self.redis = redis.Redis(host='localhost', port=6379, db=0)
+    
+    def get_cached_data(self, key, ttl=3600):
+        """获取缓存数据"""
+        data = self.redis.get(key)
+        if data:
+            return pickle.loads(data)
+        return None
+    
+    def set_cached_data(self, key, data, ttl=3600):
+        """设置缓存数据"""
+        self.redis.setex(key, ttl, pickle.dumps(data))
+```
+
+#### 并行处理
+```python
+from concurrent.futures import ThreadPoolExecutor
+
+class ParallelProcessor:
+    def analyze_multiple_stocks(self, stock_codes):
+        """并行分析多只股票"""
+        with ThreadPoolExecutor(max_workers=5) as executor:
+            futures = {
+                executor.submit(self.analyze_stock, code): code
+                for code in stock_codes
+            }
+            
+            results = {}
+            for future in futures:
+                code = futures[future]
+                try:
+                    results[code] = future.result(timeout=30)
+                except Exception as e:
+                    print(f"分析{code}失败: {e}")
+                    results[code] = None
+            
+            return results
+```
+
+### 2.9 案例总结
+
+#### 实现效果
+1. **自动化程度高**：从数据获取到报告生成全自动
+2. **实时性强**：30分钟间隔的实时监控
+3. **可靠性好**：完善的错误处理和日志管理
+4. **扩展性强**：模块化设计，易于扩展
+
+#### 技术要点
+1. **多工具整合**：Heartbeat + Cron + 自定义脚本
+2. **错误处理**：分级错误处理和重试机制
+3. **性能优化**：缓存 + 并行处理
+4. **监控告警**：实时监控和预警系统
+
+#### 业务价值
+1. **效率提升**：节省90%以上的分析时间
+2. **决策支持**：提供数据驱动的投资建议
+3. **风险控制**：实时监控和风险预警
+4. **知识积累**：自动化的投资知识库
+
+---
+
+## 第三部分：Cron定时任务（30分钟）
+
 #### 原则3：智能过滤
 ```markdown
 # 只在需要时通知

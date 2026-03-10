@@ -99,6 +99,803 @@ You: 把 document.pdf 拆分：
 Agent: [拆分PDF]
 ✅ 已拆分完成
 
+---
+
+## 第二部分：实战案例 - 智能股票分析报告自动化生成（45分钟）
+
+### 2.1 案例背景
+
+#### 业务需求
+在智能股票分析系统中，需要将分析结果自动生成为专业的投资报告，包括：
+1. **每日投资晨报**：Markdown格式，包含技术分析和基本面分析
+2. **周度总结报告**：Word格式，包含详细分析和图表
+3. **月度投资报告**：PDF格式，专业排版和打印版本
+4. **可视化图表**：PNG/JPEG格式，用于演示和分享
+
+#### 传统方式的问题
+- 手动编写报告耗时耗力
+- 格式不统一，质量参差不齐
+- 图表需要手动制作和更新
+- 难以实现批量生成和分发
+
+#### OpenClaw解决方案
+通过文档处理技能实现：
+- 自动生成Markdown分析报告
+- 转换为Word/PDF专业格式
+- 自动插入图表和数据表格
+- 批量生成和分发
+
+### 2.2 报告生成系统架构
+
+```
+智能股票分析报告系统
+├── 数据输入层
+│   ├── 股票分析结果（JSON格式）
+│   ├── 技术指标数据
+│   └── 财务数据
+├── 报告生成层
+│   ├── Markdown报告生成器
+│   ├── Word文档生成器
+│   ├── PDF文档生成器
+│   └── 图表生成器
+├── 模板管理层
+│   ├── 报告模板库
+│   ├── 样式配置文件
+│   └── 图表模板
+├── 输出管理层
+│   ├── 格式转换
+│   ├── 质量检查
+│   └── 版本控制
+└── 分发集成层
+    ├── 飞书文档集成
+    ├── 邮件发送
+    └── 文件存储
+```
+
+### 2.3 Markdown报告生成
+
+#### 基础报告模板
+```markdown
+# {{report_title}}
+
+**报告日期**: {{report_date}}
+**生成时间**: {{generation_time}}
+**分析工具**: OpenClaw智能股票分析系统
+
+## 执行摘要
+
+### 市场概况
+{{market_summary}}
+
+### 投资建议
+{{investment_advice}}
+
+## 个股分析
+
+{% for stock in stocks %}
+### {{stock.name}} ({{stock.code}})
+
+#### 技术分析
+{{stock.technical_analysis}}
+
+#### 基本面分析
+{{stock.fundamental_analysis}}
+
+#### 风险评估
+{{stock.risk_assessment}}
+
+#### 操作建议
+{{stock.recommendation}}
+{% endfor %}
+
+## 附录
+
+### 技术指标说明
+{{technical_indicators_explanation}}
+
+### 免责声明
+{{disclaimer}}
+```
+
+#### 模板填充实现
+```python
+# ~/.openclaw/workspace/scripts/report_template_filler.py
+import json
+from datetime import datetime
+from jinja2 import Template
+
+class ReportGenerator:
+    def __init__(self, template_path):
+        with open(template_path, 'r', encoding='utf-8') as f:
+            self.template = Template(f.read())
+    
+    def generate_report(self, analysis_data, report_type="daily"):
+        """生成报告"""
+        context = {
+            'report_title': self.get_report_title(report_type),
+            'report_date': datetime.now().strftime('%Y-%m-%d'),
+            'generation_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'market_summary': self.generate_market_summary(analysis_data),
+            'investment_advice': self.generate_investment_advice(analysis_data),
+            'stocks': self.prepare_stock_data(analysis_data),
+            'technical_indicators_explanation': self.get_technical_explanation(),
+            'disclaimer': self.get_disclaimer()
+        }
+        
+        report_content = self.template.render(**context)
+        
+        # 保存报告
+        filename = f"{report_type}_report_{datetime.now().strftime('%Y%m%d')}.md"
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write(report_content)
+        
+        return filename
+```
+
+### 2.4 Word文档生成
+
+#### 使用python-docx生成专业报告
+```python
+# ~/.openclaw/workspace/scripts/word_report_generator.py
+from docx import Document
+from docx.shared import Inches, Pt, RGBColor
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.table import WD_TABLE_ALIGNMENT
+import matplotlib.pyplot as plt
+import io
+
+class WordReportGenerator:
+    def __init__(self):
+        self.document = Document()
+        self.setup_styles()
+    
+    def setup_styles(self):
+        """设置文档样式"""
+        # 设置默认字体
+        style = self.document.styles['Normal']
+        font = style.font
+        font.name = '微软雅黑'
+        font.size = Pt(10.5)
+    
+    def add_title(self, title):
+        """添加标题"""
+        heading = self.document.add_heading(title, 0)
+        heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    
+    def add_section(self, title, level=1):
+        """添加章节"""
+        self.document.add_heading(title, level)
+    
+    def add_table(self, data, headers):
+        """添加表格"""
+        table = self.document.add_table(rows=1, cols=len(headers))
+        table.style = 'Light Grid Accent 1'
+        table.alignment = WD_TABLE_ALIGNMENT.CENTER
+        
+        # 添加表头
+        header_cells = table.rows[0].cells
+        for i, header in enumerate(headers):
+            header_cells[i].text = header
+            header_cells[i].paragraphs[0].runs[0].font.bold = True
+        
+        # 添加数据行
+        for row_data in data:
+            row_cells = table.add_row().cells
+            for i, cell_data in enumerate(row_data):
+                row_cells[i].text = str(cell_data)
+    
+    def add_chart(self, chart_image_path, caption=""):
+        """添加图表"""
+        self.document.add_picture(chart_image_path, width=Inches(6))
+        if caption:
+            paragraph = self.document.add_paragraph(caption)
+            paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            paragraph.runs[0].italic = True
+    
+    def generate_stock_report(self, stock_data):
+        """生成股票分析报告"""
+        # 添加标题
+        self.add_title(f"{stock_data['name']} ({stock_data['code']}) 投资分析报告")
+        
+        # 添加基本信息
+        self.add_section("基本信息", 1)
+        info_table = [
+            ["股票代码", stock_data['code']],
+            ["股票名称", stock_data['name']],
+            ["当前价格", f"¥{stock_data['price']}"],
+            ["分析日期", datetime.now().strftime('%Y-%m-%d')],
+            ["分析工具", "OpenClaw智能分析系统"]
+        ]
+        self.add_table(info_table, ["项目", "数值"])
+        
+        # 添加技术分析
+        self.add_section("技术分析", 1)
+        self.add_section("技术指标", 2)
+        
+        technical_table = [
+            ["RSI", f"{stock_data['rsi']:.2f}", self.get_rsi_status(stock_data['rsi'])],
+            ["MACD", f"{stock_data['macd']:.4f}", stock_data['macd_signal']],
+            ["布林带上轨", f"¥{stock_data['bb_upper']:.2f}", ""],
+            ["布林带中轨", f"¥{stock_data['bb_middle']:.2f}", ""],
+            ["布林带下轨", f"¥{stock_data['bb_lower']:.2f}", ""],
+            ["5日均线", f"¥{stock_data['ma5']:.2f}", ""],
+            ["20日均线", f"¥{stock_data['ma20']:.2f}", ""]
+        ]
+        self.add_table(technical_table, ["指标", "数值", "信号"])
+        
+        # 添加基本面分析
+        self.add_section("基本面分析", 1)
+        
+        fundamental_table = [
+            ["市盈率(PE)", f"{stock_data['pe']:.2f}", f"行业平均: {stock_data['industry_pe']:.2f}"],
+            ["市净率(PB)", f"{stock_data['pb']:.2f}", f"行业平均: {stock_data['industry_pb']:.2f}"],
+            ["净资产收益率(ROE)", f"{stock_data['roe']:.2f}%", f"行业平均: {stock_data['industry_roe']:.2f}%"],
+            ["股息率", f"{stock_data['dividend_yield']:.2f}%", f"行业平均: {stock_data['industry_dividend']:.2f}%"],
+            ["营收增长率", f"{stock_data['revenue_growth']:.2f}%", ""],
+            ["净利润增长率", f"{stock_data['profit_growth']:.2f}%", ""]
+        ]
+        self.add_table(fundamental_table, ["财务指标", "数值", "对比"])
+        
+        # 添加风险评估
+        self.add_section("风险评估", 1)
+        
+        risk_table = [
+            ["风险等级", stock_data['risk_level'], ""],
+            ["风险评分", f"{stock_data['risk_score']}/100", ""],
+            ["主要风险", "\n".join(stock_data['risks'][:3]), ""],
+            ["建议操作", stock_data['recommendation'], ""]
+        ]
+        self.add_table(risk_table, ["项目", "内容", "备注"])
+        
+        # 添加图表
+        self.add_section("技术图表", 1)
+        
+        # 生成并添加价格走势图
+        price_chart_path = self.generate_price_chart(stock_data)
+        self.add_chart(price_chart_path, "价格走势与技术指标")
+        
+        # 添加投资建议
+        self.add_section("投资建议", 1)
+        self.document.add_paragraph(stock_data['detailed_recommendation'])
+        
+        # 添加免责声明
+        self.add_section("免责声明", 1)
+        self.document.add_paragraph(self.get_disclaimer())
+        
+        # 保存文档
+        filename = f"{stock_data['code']}_analysis_{datetime.now().strftime('%Y%m%d')}.docx"
+        self.document.save(filename)
+        
+        return filename
+```
+
+### 2.5 PDF文档生成
+
+#### 从Word转换为PDF
+```bash
+# 使用LibreOffice转换
+libreoffice --headless --convert-to pdf report.docx
+
+# 使用python的pdfkit（需要wkhtmltopdf）
+import pdfkit
+
+# 从HTML转换
+pdfkit.from_file('report.html', 'report.pdf')
+
+# 从URL转换
+pdfkit.from_url('http://example.com', 'report.pdf')
+
+# 从字符串转换
+pdfkit.from_string('<h1>报告标题</h1>', 'report.pdf')
+```
+
+#### 使用reportlab直接生成PDF
+```python
+# ~/.openclaw/workspace/scripts/pdf_report_generator.py
+from reportlab.lib.pagesizes import letter, A4
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.units import inch
+from reportlab.lib import colors
+from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
+
+class PDFReportGenerator:
+    def __init__(self, filename):
+        self.doc = SimpleDocTemplate(
+            filename,
+            pagesize=A4,
+            rightMargin=72,
+            leftMargin=72,
+            topMargin=72,
+            bottomMargin=72
+        )
+        self.styles = getSampleStyleSheet()
+        self.setup_custom_styles()
+        self.story = []
+    
+    def setup_custom_styles(self):
+        """设置自定义样式"""
+        # 标题样式
+        self.styles.add(ParagraphStyle(
+            name='CustomTitle',
+            parent=self.styles['Title'],
+            fontSize=24,
+            alignment=TA_CENTER,
+            spaceAfter=30
+        ))
+        
+        # 章节标题样式
+        self.styles.add(ParagraphStyle(
+            name='CustomHeading1',
+            parent=self.styles['Heading1'],
+            fontSize=18,
+            spaceBefore=12,
+            spaceAfter=6
+        ))
+        
+        # 正文样式
+        self.styles.add(ParagraphStyle(
+            name='CustomBody',
+            parent=self.styles['Normal'],
+            fontSize=10,
+            leading=14
+        ))
+    
+    def add_title(self, title):
+        """添加标题"""
+        self.story.append(Paragraph(title, self.styles['CustomTitle']))
+        self.story.append(Spacer(1, 0.25*inch))
+    
+    def add_heading(self, text, level=1):
+        """添加标题"""
+        if level == 1:
+            self.story.append(Paragraph(text, self.styles['CustomHeading1']))
+        elif level == 2:
+            self.story.append(Paragraph(text, self.styles['Heading2']))
+        self.story.append(Spacer(1, 0.1*inch))
+    
+    def add_paragraph(self, text):
+        """添加段落"""
+        self.story.append(Paragraph(text, self.styles['CustomBody']))
+        self.story.append(Spacer(1, 0.1*inch))
+    
+    def add_table(self, data, col_widths=None):
+        """添加表格"""
+        table = Table(data, colWidths=col_widths)
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 10),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ]))
+        self.story.append(table)
+        self.story.append(Spacer(1, 0.25*inch))
+    
+    def add_image(self, image_path, width=6*inch):
+        """添加图片"""
+        img = Image(image_path, width=width, height=3*inch)
+        self.story.append(img)
+        self.story.append(Spacer(1, 0.25*inch))
+    
+    def generate_report(self, stock_data):
+        """生成PDF报告"""
+        # 添加标题
+        self.add_title(f"{stock_data['name']} ({stock_data['code']}) 投资分析报告")
+        
+        # 添加基本信息
+        self.add_heading("基本信息", 1)
+        info_data = [
+            ['项目', '内容'],
+            ['股票代码', stock_data['code']],
+            ['股票名称', stock_data['name']],
+            ['当前价格', f"¥{stock_data['price']}"],
+            ['分析日期', datetime.now().strftime('%Y-%m-%d')]
+        ]
+        self.add_table(info_data, [2*inch, 4*inch])
+        
+        # 添加技术分析
+        self.add_heading("技术分析", 1)
+        self.add_paragraph("以下是该股票的技术指标分析：")
+        
+        tech_data = [
+            ['技术指标', '数值', '状态'],
+            ['RSI', f"{stock_data['rsi']:.2f}", self.get_rsi_status(stock_data['rsi'])],
+            ['MACD', f"{stock_data['macd']:.4f}", stock_data['macd_signal']],
+            ['布林带位置', self.get_bollinger_position(stock_data), ''],
+            ['5日均线', f"¥{stock_data['ma5']:.2f}", ''],
+            ['20日均线', f"¥{stock_data['ma20']:.2f}", '']
+        ]
+        self.add_table(tech_data, [1.5*inch, 1.5*inch, 3*inch])
+        
+        # 添加基本面分析
+        self.add_heading("基本面分析", 1)
+        
+        fundamental_data = [
+            ['财务指标', '数值', '行业对比'],
+            ['市盈率(PE)', f"{stock_data['pe']:.2f}", f"行业: {stock_data['industry_pe']:.2f}"],
+            ['市净率(PB)', f"{stock_data['pb']:.2f}", f"行业: {stock_data['industry_pb']:.2f}"],
+            ['ROE', f"{stock_data['roe']:.2f}%", f"行业: {stock_data['industry_roe']:.2f}%"],
+            ['股息率', f"{stock_data['dividend_yield']:.2f}%", f"行业: {stock_data['industry_dividend']:.2f}%"]
+        ]
+        self.add_table(fundamental_data, [1.5*inch, 1.5*inch, 3*inch])
+        
+        # 添加风险评估
+        self.add_heading("风险评估", 1)
+        
+        risk_data = [
+            ['风险维度', '评估结果', '说明'],
+            ['风险等级', stock_data['risk_level'], ''],
+            ['风险评分', f"{stock_data['risk_score']}/100", '分数越高风险越大'],
+            ['技术风险', self.get_technical_risk(stock_data), ''],
+            ['基本面风险', self.get_fundamental_risk(stock_data), ''],
+            ['市场风险', self.get_market_risk(stock_data), '']
+        ]
+        self.add_table(risk_data, [1.5*inch, 1.5*inch, 3*inch])
+        
+        # 添加投资建议
+        self.add_heading("投资建议", 1)
+        self.add_paragraph(stock_data['detailed_recommendation'])
+        
+        # 添加操作策略
+        self.add_heading("操作策略", 2)
+        strategy_data = [
+            ['时间维度', '策略', '目标'],
+            ['短期(1-4周)', stock_data['short_term_strategy'], stock_data['short_term_target']],
+            ['中期(1-3月)', stock_data['mid_term_strategy'], stock_data['mid_term_target']],
+            ['长期(3-12月)', stock_data['long_term_strategy'], stock_data['long_term_target']]
+        ]
+        self.add_table(strategy_data, [1.5*inch, 3*inch, 1.5*inch])
+        
+        # 添加免责声明
+        self.add_heading("免责声明", 1)
+        self.add_paragraph(self.get_disclaimer())
+        
+        # 生成PDF
+        self.doc.build(self.story)
+        
+        return self.doc.filename
+
+### 2.6 图表生成与插入
+
+#### 技术图表生成
+```python
+# ~/.openclaw/workspace/scripts/chart_generator.py
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+from datetime import datetime, timedelta
+
+class StockChartGenerator:
+    def __init__(self, style='seaborn'):
+        plt.style.use(style)
+    
+    def generate_price_chart(self, price_data, indicators, save_path):
+        """生成价格走势图"""
+        fig, axes = plt.subplots(3, 1, figsize=(12, 10), height_ratios=[3, 1, 1])
+        
+        # 价格走势图
+        axes[0].plot(price_data['date'], price_data['close'], label='收盘价', color='blue', linewidth=2)
+        axes[0].plot(price_data['date'], price_data['ma5'], label='5日均线', color='orange', alpha=0.7)
+        axes[0].plot(price_data['date'], price_data['ma20'], label='20日均线', color='green', alpha=0.7)
+        axes[0].fill_between(price_data['date'], indicators['bb_lower'], indicators['bb_upper'], 
+                            alpha=0.2, color='gray', label='布林带')
+        axes[0].set_title('价格走势与技术指标', fontsize=14, fontweight='bold')
+        axes[0].legend(loc='upper left')
+        axes[0].grid(True, alpha=0.3)
+        
+        # 成交量图
+        axes[1].bar(price_data['date'], price_data['volume'], color='gray', alpha=0.7)
+        axes[1].set_title('成交量', fontsize=12)
+        axes[1].grid(True, alpha=0.3)
+        
+        # RSI图
+        axes[2].plot(price_data['date'], indicators['rsi'], label='RSI', color='purple')
+        axes[2].axhline(y=70, color='red', linestyle='--', alpha=0.5, label='超买线')
+        axes[2].axhline(y=30, color='green', linestyle='--', alpha=0.5, label='超卖线')
+        axes[2].set_title('RSI指标', fontsize=12)
+        axes[2].legend(loc='upper left')
+        axes[2].grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        plt.close()
+        
+        return save_path
+    
+    def generate_financial_chart(self, financial_data, save_path):
+        """生成财务分析图"""
+        fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+        
+        # 盈利能力趋势
+        axes[0, 0].plot(financial_data['year'], financial_data['net_margin'], 
+                       marker='o', label='净利率', color='blue')
+        axes[0, 0].plot(financial_data['year'], financial_data['gross_margin'], 
+                       marker='s', label='毛利率', color='green')
+        axes[0, 0].set_title('盈利能力趋势', fontsize=12)
+        axes[0, 0].legend()
+        axes[0, 0].grid(True, alpha=0.3)
+        
+        # 成长性指标
+        x = np.arange(len(financial_data['year']))
+        width = 0.35
+        axes[0, 1].bar(x - width/2, financial_data['revenue_growth'], width, label='营收增长率')
+        axes[0, 1].bar(x + width/2, financial_data['profit_growth'], width, label='净利润增长率')
+        axes[0, 1].set_xticks(x)
+        axes[0, 1].set_xticklabels(financial_data['year'])
+        axes[0, 1].set_title('成长性指标', fontsize=12)
+        axes[0, 1].legend()
+        axes[0, 1].grid(True, alpha=0.3)
+        
+        # 财务安全指标
+        axes[1, 0].plot(financial_data['year'], financial_data['debt_ratio'], 
+                       marker='o', label='资产负债率', color='red')
+        axes[1, 0].plot(financial_data['year'], financial_data['current_ratio'], 
+                       marker='s', label='流动比率', color='orange')
+        axes[1, 0].set_title('财务安全指标', fontsize=12)
+        axes[1, 0].legend()
+        axes[1, 0].grid(True, alpha=0.3)
+        
+        # 估值指标
+        axes[1, 1].plot(financial_data['year'], financial_data['pe_ratio'], 
+                       marker='o', label='市盈率', color='purple')
+        axes[1, 1].plot(financial_data['year'], financial_data['pb_ratio'], 
+                       marker='s', label='市净率', color='brown')
+        axes[1, 1].set_title('估值指标', fontsize=12)
+        axes[1, 1].legend()
+        axes[1, 1].grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        plt.savefig(save_path, dpi=300, bbox_inches='tight')
+        plt.close()
+        
+        return save_path
+```
+
+### 2.7 飞书文档集成
+
+#### 自动上传到飞书文档
+```python
+# ~/.openclaw/workspace/scripts/feishu_integration.py
+import requests
+import json
+from datetime import datetime
+
+class FeishuDocumentManager:
+    def __init__(self, app_id, app_secret):
+        self.app_id = app_id
+        self.app_secret = app_secret
+        self.access_token = self.get_access_token()
+    
+    def get_access_token(self):
+        """获取飞书访问令牌"""
+        url = "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal"
+        headers = {"Content-Type": "application/json; charset=utf-8"}
+        data = {
+            "app_id": self.app_id,
+            "app_secret": self.app_secret
+        }
+        
+        response = requests.post(url, headers=headers, json=data)
+        return response.json()['tenant_access_token']
+    
+    def create_document(self, title, content, folder_token=None):
+        """创建飞书文档"""
+        url = "https://open.feishu.cn/open-apis/docx/v1/documents"
+        headers = {
+            "Authorization": f"Bearer {self.access_token}",
+            "Content-Type": "application/json; charset=utf-8"
+        }
+        
+        data = {
+            "title": title,
+            "folder_token": folder_token
+        }
+        
+        response = requests.post(url, headers=headers, json=data)
+        document_info = response.json()['data']['document']
+        
+        # 写入内容
+        self.write_document_content(document_info['document_id'], content)
+        
+        return document_info
+    
+    def write_document_content(self, document_id, content):
+        """写入文档内容"""
+        url = f"https://open.feishu.cn/open-apis/docx/v1/documents/{document_id}/blocks"
+        headers = {
+            "Authorization": f"Bearer {self.access_token}",
+            "Content-Type": "application/json; charset=utf-8"
+        }
+        
+        # 将Markdown转换为飞书文档格式
+        blocks = self.convert_markdown_to_blocks(content)
+        
+        data = {
+            "document_id": document_id,
+            "blocks": blocks
+        }
+        
+        response = requests.patch(url, headers=headers, json=data)
+        return response.json()
+    
+    def convert_markdown_to_blocks(self, markdown_content):
+        """将Markdown转换为飞书文档块"""
+        blocks = []
+        lines = markdown_content.split('\n')
+        
+        for line in lines:
+            if line.startswith('# '):
+                # 一级标题
+                blocks.append({
+                    "block_type": 1,
+                    "heading1": {
+                        "elements": [{
+                            "text_run": {
+                                "content": line[2:],
+                                "text_element_style": {
+                                    "bold": True,
+                                    "font_size": 24
+                                }
+                            }
+                        }]
+                    }
+                })
+            elif line.startswith('## '):
+                # 二级标题
+                blocks.append({
+                    "block_type": 2,
+                    "heading2": {
+                        "elements": [{
+                            "text_run": {
+                                "content": line[3:],
+                                "text_element_style": {
+                                    "bold": True,
+                                    "font_size": 20
+                                }
+                            }
+                        }]
+                    }
+                })
+            elif line.startswith('|'):
+                # 表格
+                table_data = self.parse_markdown_table(line)
+                blocks.append({
+                    "block_type": 27,
+                    "table": {
+                        "cells": table_data,
+                        "property": {
+                            "column_size": len(table_data[0]),
+                            "row_size": len(table_data)
+                        }
+                    }
+                })
+            elif line.strip():
+                # 普通段落
+                blocks.append({
+                    "block_type": 3,
+                    "paragraph": {
+                        "elements": [{
+                            "text_run": {
+                                "content": line,
+                                "text_element_style": {}
+                            }
+                        }]
+                    }
+                })
+        
+        return blocks
+
+#### 自动化报告上传流程
+```bash
+# 完整的报告生成和上传流程
+1. 生成Markdown报告 → 2. 转换为Word格式 → 3. 生成PDF格式 → 4. 上传到飞书 → 5. 发送通知
+
+# 实现脚本
+python generate_markdown_report.py    # 生成Markdown报告
+python convert_to_word.py             # 转换为Word
+python convert_to_pdf.py              # 转换为PDF
+python upload_to_feishu.py            # 上传到飞书
+python send_notifications.py          # 发送通知
+```
+
+### 2.8 自动化工作流配置
+
+#### 完整的工作流脚本
+```bash
+#!/bin/bash
+# ~/.openclaw/workspace/scripts/full_report_workflow.sh
+
+# 配置
+STOCK_CODES="600519.SH 000858.SZ 600036.SH"
+REPORT_DATE=$(date +%Y%m%d)
+REPORT_DIR="/home/jerryxu/.openclaw/stock-analysis/reports/$REPORT_DATE"
+
+echo "开始执行股票分析报告工作流: $REPORT_DATE"
+
+# 1. 创建报告目录
+mkdir -p $REPORT_DIR
+
+# 2. 分析每只股票
+for CODE in $STOCK_CODES; do
+    echo "分析股票: $CODE"
+    
+    # 获取数据
+    python scripts/data_collector.py --code $CODE --output $REPORT_DIR/${CODE}_data.json
+    
+    # 技术分析
+    python scripts/technical_analyzer.py --input $REPORT_DIR/${CODE}_data.json --output $REPORT_DIR/${CODE}_technical.json
+    
+    # 基本面分析
+    python scripts/fundamental_analyzer.py --input $REPORT_DIR/${CODE}_data.json --output $REPORT_DIR/${CODE}_fundamental.json
+    
+    # 生成图表
+    python scripts/chart_generator.py --code $CODE --output $REPORT_DIR/${CODE}_charts/
+done
+
+# 3. 生成报告
+echo "生成报告..."
+
+# Markdown报告
+python scripts/markdown_report_generator.py --date $REPORT_DATE --dir $REPORT_DIR --output $REPORT_DIR/daily_report.md
+
+# Word报告
+python scripts/word_report_generator.py --input $REPORT_DIR/daily_report.md --output $REPORT_DIR/daily_report.docx
+
+# PDF报告
+python scripts/pdf_report_generator.py --input $REPORT_DIR/daily_report.docx --output $REPORT_DIR/daily_report.pdf
+
+# 4. 上传到飞书
+echo "上传到飞书..."
+python scripts/feishu_uploader.py --file $REPORT_DIR/daily_report.md --title "每日投资晨报 $REPORT_DATE"
+
+# 5. 发送通知
+echo "发送通知..."
+python scripts/notification_sender.py --report $REPORT_DIR/daily_report.md --channels feishu,telegram,email
+
+echo "股票分析报告工作流完成"
+```
+
+#### 定时任务配置
+```bash
+# crontab配置
+# 每个交易日收盘后执行（15:30）
+30 15 * * 1-5 /home/jerryxu/.openclaw/workspace/scripts/full_report_workflow.sh >> /tmp/stock_report.log 2>&1
+
+# 每周五生成周报（17:00）
+0 17 * * 5 /home/jerryxu/.openclaw/workspace/scripts/weekly_report_workflow.sh >> /tmp/stock_weekly.log 2>&1
+
+# 每月最后一天生成月报（18:00）
+0 18 28-31 * * [ $(date -d tomorrow +\%d) -eq 1 ] && /home/jerryxu/.openclaw/workspace/scripts/monthly_report_workflow.sh >> /tmp/stock_monthly.log 2>&1
+```
+
+### 2.9 案例总结
+
+#### 实现效果
+1. **全自动报告生成**：从数据到报告的完整自动化流程
+2. **多格式支持**：Markdown、Word、PDF多种格式
+3. **专业排版**：符合投资报告的专业标准
+4. **集成分发**：自动上传和通知
+
+#### 技术要点
+1. **模板系统**：Jinja2模板引擎实现灵活的报告生成
+2. **文档处理**：python-docx、reportlab等专业库使用
+3. **图表生成**：Matplotlib生成专业图表
+4. **云集成**：飞书文档API集成
+
+#### 业务价值
+1. **效率提升**：节省95%的报告编写时间
+2. **质量保证**：统一格式和专业标准
+3. **及时性**：实时生成和分发
+4. **可追溯**：完整的版本管理和归档
+
+---
+
+## 第三部分：Word文档自动化（30分钟）
+
 生成文件：
 - intro.pdf (5页, 800KB)
 - content.pdf (10页, 2.1MB)

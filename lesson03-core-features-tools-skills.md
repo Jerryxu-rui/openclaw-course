@@ -857,3 +857,393 @@ brew install chromium
 如有问题或建议，请在GitHub提Issue或加入社区讨论。
 
 **下节课见！** 🚀
+
+---
+
+## 第九部分：Skills实战案例（新增）
+
+### 9.1 安全防护实战
+
+#### 安装安全三件套
+```bash
+# 1. Skill Vetter（安装前扫描）
+npx skills add skill-vetter -g -y
+
+# 2. 运行Security Scanner
+openclaw chat "扫描已安装的Skills安全等级"
+
+# 3. 应用100/3法则
+# 只安装：下载量>100次 + 发布时间>3个月
+```
+
+#### 安全扫描示例
+```
+You: 扫描我的Skills安全状态
+
+Agent: [使用Skill Vetter]
+✅ 安全扫描完成
+
+结果：
+- agent-browser: 🟢 SAFE
+- gog: 🟢 SAFE
+- summarize: 🟢 SAFE
+- unknown-skill: 🔴 DANGEROUS（建议卸载）
+
+发现1个危险Skill，已隔离处理。
+```
+
+### 9.2 Capability Evolver实战
+
+#### 让AI自我进化
+```
+You: /evolve
+
+Agent: [分析历史对话]
+正在分析你的使用习惯...
+
+发现以下重复任务：
+1. 每天检查邮件（10次/天）
+2. 生成日报（1次/天）
+3. 搜索技术文章（5次/天）
+
+建议生成新Skills：
+1. email-automator（邮件自动化）
+2. daily-report-generator（日报生成器）
+3. tech-news-collector（技术新闻收集器）
+
+是否生成这些Skills？
+```
+
+#### 自动生成的Skill示例
+```javascript
+// email-automator.js（AI自动生成）
+module.exports = {
+  name: "email-automator",
+  description: "自动处理日常邮件",
+  execute: async (context) => {
+    // 检查未读邮件
+    const emails = await checkUnreadEmails();
+    
+    // 分类处理
+    for (const email of emails) {
+      if (isImportant(email)) {
+        await notifyUser(email);
+      } else if (isSpam(email)) {
+        await archiveEmail(email);
+      } else {
+        await summarizeAndSave(email);
+      }
+    }
+  }
+};
+```
+
+### 9.3 Agent Browser实战
+
+#### 自动化网页操作
+```
+You: 帮我在GitHub上创建一个新仓库
+
+Agent: [使用agent-browser]
+1. 打开 https://github.com/new
+2. 填写仓库名称：my-project
+3. 选择公开/私有
+4. 添加README
+5. 点击创建
+
+✅ 仓库已创建：https://github.com/yourname/my-project
+```
+
+#### 网站测试自动化
+```
+You: 测试 https://example.com 的登录功能
+
+Agent: [使用dogfood skill]
+测试计划：
+1. 打开登录页面
+2. 输入测试账号
+3. 点击登录按钮
+4. 验证登录成功
+5. 检查错误处理
+
+测试结果：
+✅ 登录功能正常
+✅ 错误处理正常
+⚠️ 密码强度提示不明显
+```
+
+### 9.4 Obsidian集成实战
+
+#### 连接Obsidian笔记库
+```bash
+# 安装Obsidian Skill
+npx skills add obsidian -g -y
+```
+
+#### 配置Obsidian路径
+```json
+{
+  "skills": {
+    "obsidian": {
+      "vaultPath": "~/Documents/Obsidian/MyVault",
+      "autoSync": true,
+      "indexInterval": "1h"
+    }
+  }
+}
+```
+
+#### 使用示例
+```
+You: 在我的Obsidian笔记中搜索关于OpenClaw的内容
+
+Agent: [搜索Obsidian笔记库]
+找到3篇相关笔记：
+
+1. OpenClaw安装指南（2026-03-01）
+   路径：技术/AI/OpenClaw/安装.md
+   摘要：详细记录了安装步骤...
+
+2. Skills使用心得（2026-03-05）
+   路径：技术/AI/OpenClaw/Skills.md
+   摘要：总结了30+核心Skills...
+
+3. 自动化工作流设计（2026-03-08）
+   路径：技术/AI/OpenClaw/工作流.md
+   摘要：设计了3个自动化工作流...
+```
+
+### 9.5 语音交互实战
+
+#### 安装语音Skills
+```bash
+# 安装NoizAI语音Skills
+cd ~/.openclaw/skills
+git clone https://github.com/NoizAI/skills.git noizai-skills
+openclaw gateway restart
+```
+
+#### 配置语音识别
+```json
+{
+  "skills": {
+    "voice-command": {
+      "enabled": true,
+      "language": "zh-CN",
+      "wakeWord": "Hey OpenClaw",
+      "autoTranscribe": true
+    }
+  }
+}
+```
+
+#### 使用示例
+```
+[语音] "Hey OpenClaw，帮我查一下今天的天气"
+
+Agent: [语音识别]
+正在查询天气...
+
+[语音回复]
+今天北京天气晴朗，温度15-25°C，空气质量良好。
+```
+
+### 9.6 工作流编排实战
+
+#### 创建自动化工作流
+```
+You: 创建一个每天早上8点的自动化工作流
+
+Agent: [使用Clawflows]
+工作流设计：
+
+1. 时间：每天08:00
+2. 步骤：
+   - 检查未读邮件（Gog）
+   - 查询今日日程（Google Calendar）
+   - 搜索行业新闻（Exa Web Search）
+   - 生成每日简报（Summarize）
+   - 发送到Telegram（Telegram Bot）
+3. 异常处理：
+   - 失败重试3次
+   - 发送告警通知
+
+✅ 工作流已创建：daily-morning-briefing
+```
+
+#### 工作流执行示例
+```
+[每天08:00自动执行]
+📊 每日简报（2026-03-09）
+
+邮件：
+- 未读：3封（2封重要）
+- 待回复：2封
+
+日程：
+- 10:00 团队站会
+- 14:00 项目评审
+- 16:00 客户沟通
+
+新闻：
+- AI领域新突破（来源：TechCrunch）
+- OpenClaw 2.0发布（来源：官方博客）
+
+今日建议：
+1. 优先回复重要邮件
+2. 准备项目评审材料
+3. 关注AI新进展
+```
+
+---
+
+## 第十部分：Skills最佳实践（新增）
+
+### 10.1 安装策略
+
+#### 渐进式安装
+```
+第1周：安全三件套 + Top 5
+第2周：根据工作场景选择分类
+第3周：工作流编排
+第4周：AI自进化
+```
+
+#### 权限管理
+```
+最小权限原则：
+- 只授予必要的权限
+- 定期审查权限使用
+- 及时撤销未使用的权限
+```
+
+### 10.2 性能优化
+
+#### 批量处理
+```javascript
+// 优化前：每次调用API
+for (const item of items) {
+  await processItem(item);  // 多次API调用
+}
+
+// 优化后：批量处理
+const batches = chunk(items, 10);  // 每批10个
+for (const batch of batches) {
+  await processBatch(batch);  // 减少API调用
+}
+```
+
+#### 缓存策略
+```json
+{
+  "cache": {
+    "enabled": true,
+    "ttl": "1h",
+    "maxSize": "500MB",
+    "strategies": {
+      "search": "5m",
+      "summary": "1h",
+      "data": "24h"
+    }
+  }
+}
+```
+
+### 10.3 故障排查
+
+#### 常见问题
+```
+1. Skill安装失败
+   - 检查网络连接
+   - 验证权限
+   - 查看日志
+
+2. Skill执行错误
+   - 检查配置
+   - 验证依赖
+   - 查看错误日志
+
+3. 性能问题
+   - 检查并发限制
+   - 优化批量处理
+   - 启用缓存
+```
+
+#### 调试命令
+```bash
+# 查看Skill日志
+openclaw gateway logs | grep "skill"
+
+# 检查Skill状态
+openclaw chat "检查Skills运行状态"
+
+# 测试单个Skill
+openclaw chat "测试agent-browser功能"
+```
+
+---
+
+## 作业与练习（新增）
+
+### 作业4：Skills实战（必做）
+
+**任务：** 完成以下任意一个实战项目
+
+**选项A：自动化邮件处理**
+1. 安装Gog Skill
+2. 配置邮件自动分类
+3. 设置每日摘要
+4. 测试自动化流程
+
+**选项B：浏览器自动化**
+1. 安装Agent Browser
+2. 自动化一个网站操作
+3. 创建测试脚本
+4. 验证执行结果
+
+**选项C：知识库集成**
+1. 安装Obsidian Skill
+2. 连接你的笔记库
+3. 实现知识搜索
+4. 测试集成效果
+
+**提交：**
+- 配置文件
+- 操作截图
+- 测试结果
+- 问题总结
+
+---
+
+## 扩展阅读
+
+### 推荐资源
+
+#### 官方文档
+- Skills开发指南：https://docs.openclaw.ai/skills
+- API参考：https://docs.openclaw.ai/api
+- 最佳实践：https://docs.openclaw.ai/best-practices
+
+#### 社区资源
+- ClawHub：https://clawhub.com
+- Skills.sh：https://skills.sh
+- GitHub仓库：https://github.com/openclaw/skills
+
+#### 相关课程
+- 第12课：自定义Skill开发
+- 第14课：个人知识管理系统
+- 第15课：AI驱动的工作助手
+
+---
+
+**恭喜完成Skills系统学习！** 🎉
+
+**下一步：**
+1. 实践所学Skills
+2. 开发自定义Skills
+3. 优化工作流程
+4. 分享最佳实践
+
+---
+
+© 2026 OpenClaw课程 | 第3课补充内容
