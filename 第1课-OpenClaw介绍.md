@@ -4,6 +4,9 @@
 **难度：** 入门  
 **目标：** 全面理解OpenClaw的价值和应用场景
 
+![OpenClaw橙皮书封面](images/orange-book/orange-book-cover.jpg)
+*图：OpenClaw橙皮书封面 - 一站式参考手册*
+
 ---
 
 ## 一、AI Agent的演进历程
@@ -56,6 +59,9 @@ AI Agent：你设定目标 → AI持续工作 → 主动汇报
 ---
 
 ## 二、OpenClaw核心架构
+
+![OpenClaw橙皮书内容页](images/orange-book/orange-book-content.jpg)
+*图：OpenClaw橙皮书内容页 - 详细的技术架构和部署方案*
 
 ### 2.1 系统架构图
 
