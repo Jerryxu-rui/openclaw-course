@@ -9,6 +9,13 @@
 
 面向开发者、产品经理、AI从业者的OpenClaw实战课程，从零基础到高级应用，打造个人AI助手生态。
 
+### 📘 配套资源：OpenClaw橙皮书
+- **文档名称**：OpenClaw橙皮书-从入门到精通
+- **内容**：一站式参考手册，涵盖架构原理、部署方案、渠道接入、Skills系统、模型配置、安全与成本
+- **格式**：PDF文档（8页）
+- **作者**：花叔（AI进化论-花生）
+- **位置**：[OpenClaw橙皮书-从入门到精通.pdf](OpenClaw橙皮书-从入门到精通.pdf)
+
 ### 🎯 为什么选择OpenClaw？
 
 - ✅ **本地优先** - 数据完全掌控，隐私安全
@@ -142,6 +149,8 @@ openclaw-course/
 ├── OpenClaw课程规划.md                  # 完整课程大纲
 ├── 课程宣传文档.md                      # 宣传文档
 ├── openclaw-course-landing.html        # 宣传页面
+├── openclaw-course-presentation.html   # 金融主题演示
+├── OpenClaw橙皮书-从入门到精通.pdf      # 橙皮书参考手册
 ├── 金融实战案例1-智能体金融.md          # 金融实战案例1：智能体金融
 ├── 金融实战案例2-智能股票分析.md        # 金融实战案例2：智能股票分析
 ├── 第1课-OpenClaw介绍.md               # 第1课：OpenClaw介绍
