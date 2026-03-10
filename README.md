@@ -61,7 +61,7 @@
 
 ## 🔧 Skills指南
 
-### 📚 [OpenClaw Skills完全指南 2.0](skills-guide-v2.md) ⭐ 最新
+### 📚 [OpenClaw Skills完全指南 2.0](Skills指南-v2.md) ⭐ 最新
 
 **13,000+ Skills生态全景图 | 从安全防护到实战应用**
 
@@ -89,7 +89,7 @@ npx skills add summarize -g -y
 npx skills add vercel-labs/agent-browser --skill agent-browser -g -y
 ```
 
-### 📖 [Skills指南 v1.0](skills-guide.md)（旧版）
+### 📖 [Skills指南 v1.0](Skills指南-v1.md)（旧版）
 
 16. **智能客服系统** - 120分钟 | ⭐⭐⭐⭐⭐
 
