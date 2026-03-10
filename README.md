@@ -142,10 +142,28 @@ openclaw-course/
 ├── OpenClaw课程规划.md                  # 完整课程大纲
 ├── openclaw-course-promo.md            # 宣传文档
 ├── openclaw-course-landing.html        # 宣传页面
-├── lesson1-detailed.md                 # 第1课详细教案
-├── lesson6-memory-system.md            # 第6课：记忆系统
+├── case-study-agentic-finance.md       # 金融实战案例1：智能体金融
+├── case-study-stock-analysis.md        # 金融实战案例2：智能股票分析
+├── lesson01-openclaw-introduction.md   # 第1课：OpenClaw介绍
+├── lesson02-quick-start-installation.md # 第2课：快速安装
+├── lesson03-core-features-tools-skills.md # 第3课：核心功能
+├── lesson04-multi-channel-integration.md # 第4课：多渠道接入
+├── lesson05-model-selection-strategy.md # 第5课：模型选择
+├── lesson06-memory-system.md           # 第6课：记忆系统
+├── lesson07-deep-search.md             # 第7课：深度搜索
+├── lesson08-automation-workflow.md     # 第8课：自动化工作流
+├── lesson09-document-processing.md     # 第9课：文档处理
+├── lesson10-gateway-configuration.md   # 第10课：Gateway配置
+├── lesson11-subagent-multiagent.md     # 第11课：Sub-Agent协作
+├── lesson12-custom-skill-development.md # 第12课：自定义Skill
+├── lesson13-enterprise-deployment.md   # 第13课：企业部署
+├── lesson14-project-knowledge-management.md # 第14课：知识管理
+├── lesson15-ai-work-assistant.md       # 第15课：工作助手
+├── lesson16-intelligent-customer-service.md # 第16课：智能客服
+├── skills-guide.md                     # Skills指南
 └── memory/                             # 开发日志
-    └── 2026-03-08.md
+    ├── 2026-03-08.md
+    └── 2026-03-09.md
 ```
 
 ---
@@ -179,6 +197,62 @@ openclaw-course/
 - 掌握AI Agent开发
 - 掌握自动化工作流设计
 - 掌握企业级部署
+
+---
+
+## 🎯 金融实战案例系列
+
+### 案例1：智能体金融（高频交易）
+**位置**：第7课深度集成  
+**技术栈**：PolyClaw插件 + 区块链 + 高频交易  
+**核心功能**：
+- Polymarket预测市场分析
+- 实时交易信号生成
+- 安全风险控制
+- 自动化套利策略
+
+**学习重点**：
+- 区块链数据获取
+- 高频交易算法
+- 安全防护机制
+- 风险管理策略
+
+### 案例2：智能股票分析系统（投资分析）
+**位置**：第8、9、14课深度整合  
+**技术栈**：Tushare Pro + Akshare + 自动化工作流  
+**核心功能**：
+- 双数据源整合（专业+免费）
+- 技术面 + 基本面 + 风险评估
+- 自动化报告生成（Markdown/Word/PDF）
+- 实时监控与预警系统
+
+**课程整合**：
+- **第8课**：自动化工作流在股票分析中的应用
+- **第9课**：股票分析报告自动化生成
+- **第14课**：股票分析知识管理系统
+
+**学习重点**：
+- 金融数据分析与处理
+- 自动化工作流设计
+- 专业文档生成技术
+- 投资知识管理系统
+
+### 案例特色对比
+
+| 维度 | 案例1：智能体金融 | 案例2：智能股票分析 |
+|------|-----------------|-------------------|
+| **市场** | Polymarket预测市场 | A股/港股/美股传统市场 |
+| **策略** | 高频交易、套利 | 价值投资、技术分析 |
+| **数据** | 链上数据、预测数据 | 财务报表、市场数据 |
+| **工具** | PolyClaw插件 | Tushare/Akshare技能 |
+| **风险** | 黑客攻击、合约风险 | 市场风险、财务风险 |
+| **用户** | 量化交易者、极客 | 价值投资者、普通投资者 |
+
+### 学习价值
+1. **技术深度**：掌握AI在金融领域的深度应用
+2. **实战导向**：基于真实场景的完整项目开发
+3. **职业发展**：培养金融科技领域的核心竞争力
+4. **商业价值**：可直接应用于实际投资分析
 
 ---
 
