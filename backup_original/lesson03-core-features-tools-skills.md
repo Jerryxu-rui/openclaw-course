@@ -1,0 +1,1249 @@
+# 第3课：核心功能 - 工具与技能系统
+
+## 课程目标
+- 掌握OpenClaw的内置工具（read/write/edit/exec/browser/web_fetch）
+- 理解Skills系统的工作原理
+- 安装和使用常用Skills
+- 完成一个实际的文档处理任务
+
+---
+
+## 第一部分：内置工具详解（40分钟）
+
+### 1.1 文件操作工具
+
+#### read - 读取文件
+```bash
+# Agent可以读取任何文件
+openclaw chat "读取 ~/.openclaw/openclaw.json 的内容"
+```
+
+**功能：**
+- 读取文本文件
+- 支持图片（jpg/png/gif/webp）
+- 可指定行范围（offset/limit）
+- 自动截断大文件（2000行或50KB）
+
+**使用场景：**
+- 查看配置文件
+- 读取日志
+- 分析代码
+- 查看文档
+
+**示例对话：**
+```
+You: 读取 package.json 并告诉我项目依赖
+
+Agent: [读取文件]
+这个项目使用了以下主要依赖：
+- express: ^4.18.0
+- mongoose: ^7.0.0
+- dotenv: ^16.0.0
+...
+```
+
+#### write - 写入文件
+```bash
+openclaw chat "创建一个 hello.txt 文件，内容是 Hello World"
+```
+
+**功能：**
+- 创建新文件
+- 覆盖现有文件
+- 自动创建父目录
+- 支持任意文本内容
+
+**使用场景：**
+- 生成配置文件
+- 创建脚本
+- 保存数据
+- 生成文档
+
+**注意事项：**
+- write会覆盖现有文件，谨慎使用
+- 建议先备份重要文件
+- 可以用append追加内容
+
+#### edit - 精确编辑
+```bash
+openclaw chat "把 config.js 中的 port: 3000 改成 port: 8080"
+```
+
+**功能：**
+- 精确替换文本
+- 必须完全匹配（包括空格）
+- 适合小范围修改
+- 保留文件其他部分
+
+**使用场景：**
+- 修改配置
+- 更新代码
+- 修正错误
+- 调整参数
+
+**最佳实践：**
+```javascript
+// ❌ 错误：空格不匹配
+oldText: "port:3000"
+newText: "port: 8080"
+
+// ✅ 正确：完全匹配
+oldText: "port: 3000"
+newText: "port: 8080"
+```
+
+### 1.2 命令执行工具
+
+#### exec - 执行Shell命令
+```bash
+openclaw chat "列出当前目录的文件"
+```
+
+**功能：**
+- 执行任意Shell命令
+- 支持管道和重定向
+- 可设置工作目录
+- 可设置超时时间
+
+**使用场景：**
+- 文件管理（ls/cp/mv）
+- 系统信息（df/free/ps）
+- Git操作（git status/commit/push）
+- 包管理（npm/pip/apt）
+
+**安全提示：**
+- 危险命令会提示确认（rm -rf）
+- 避免执行不信任的脚本
+- 注意权限问题
+
+**示例：**
+```bash
+# 查看系统信息
+You: 查看磁盘使用情况
+Agent: [执行 df -h]
+文件系统        容量  已用  可用 已用% 挂载点
+/dev/sda1       100G   45G   50G   48% /
+...
+
+# Git操作
+You: 提交当前更改
+Agent: [执行 git add . && git commit -m "Update"]
+[main 3a7f2b1] Update
+ 2 files changed, 15 insertions(+), 3 deletions(-)
+```
+
+### 1.3 网络工具
+
+#### web_fetch - 抓取网页
+```bash
+openclaw chat "获取 https://docs.openclaw.ai 的内容"
+```
+
+**功能：**
+- 抓取网页内容
+- 自动提取正文
+- 转换为Markdown
+- 支持HTTP/HTTPS
+
+**使用场景：**
+- 获取文档
+- 抓取新闻
+- 提取数据
+- 监控网站
+
+**提取模式：**
+- `markdown`（默认）：转换为Markdown格式
+- `text`：纯文本
+
+**示例：**
+```
+You: 总结一下 OpenClaw 官网的主要内容
+
+Agent: [抓取 https://openclaw.ai]
+OpenClaw是一个开源的AI助手框架，主要特点：
+1. 端到端加密
+2. 本地优先
+3. 可扩展的Skills系统
+4. 支持多种AI模型
+...
+```
+
+#### browser - 浏览器控制
+```bash
+openclaw chat "打开 Google 并搜索 OpenClaw"
+```
+
+**功能：**
+- 控制真实浏览器
+- 支持点击、输入、截图
+- 可处理JavaScript渲染
+- 支持登录态保持
+
+**使用场景：**
+- 自动化测试
+- 网页截图
+- 表单填写
+- 需要登录的网站
+
+**高级功能：**
+- 截图（screenshot）
+- 快照（snapshot）
+- 导航（navigate）
+- 交互（click/type）
+
+**示例：**
+```
+You: 帮我在GitHub上搜索 openclaw
+
+Agent: [打开浏览器]
+[导航到 github.com]
+[输入 "openclaw" 并搜索]
+[截图]
+
+找到了OpenClaw的官方仓库：
+https://github.com/openclaw/openclaw
+⭐ 1.2k stars
+```
+
+---
+
+## 第二部分：Skills系统深度解析（30分钟）
+
+### 2.1 什么是Skill？
+
+**定义：**
+Skill是OpenClaw的扩展包，为Agent提供专业能力。
+
+**结构：**
+```
+skill-name/
+├── SKILL.md          # 技能说明（Agent会读取）
+├── package.json      # 依赖声明
+├── scripts/          # 可执行脚本
+│   ├── process.sh
+│   └── helper.py
+└── assets/           # 资源文件
+    └── template.docx
+```
+
+**工作原理：**
+1. Agent读取SKILL.md了解能力
+2. 根据任务选择合适的Skill
+3. 调用Skill中的脚本
+4. 返回结果给用户
+
+### 2.2 Skills分类
+
+#### 文档处理类
+- **pdf** - PDF处理（读取、合并、拆分、OCR）
+- **docx** - Word文档创建和编辑
+- **xlsx** - Excel电子表格处理
+
+#### 开发工具类
+- **coding-agent** - 代码生成和审查
+- **mcp-builder** - MCP服务器构建
+
+#### 搜索与记忆类
+- **codex-deep-search** - 深度网页搜索
+- **memory-distillation** - 记忆蒸馏
+
+#### 多媒体类
+- **tts** - 文本转语音
+- **video-frames** - 视频帧提取
+- **video-translation** - 视频翻译
+
+#### 实用工具类
+- **weather** - 天气查询
+- **nano-pdf** - PDF编辑
+
+### 2.3 安装Skills
+
+#### 方法1：从官方仓库安装
+```bash
+# 安装单个Skill
+openclaw skills install pdf
+
+# 安装多个Skills
+openclaw skills install pdf docx xlsx
+
+# 查看可用Skills
+openclaw skills search
+```
+
+#### 方法2：从GitHub安装
+```bash
+openclaw skills install https://github.com/user/skill-name
+```
+
+#### 方法3：本地安装
+```bash
+# 克隆Skill到本地
+git clone https://github.com/user/skill-name ~/.openclaw/skills/skill-name
+
+# 重启Gateway加载
+openclaw gateway restart
+```
+
+### 2.4 使用Skills
+
+#### 自动触发
+Agent会根据任务自动选择合适的Skill：
+
+```
+You: 帮我把这个PDF转成Word
+
+Agent: [自动使用pdf skill]
+[读取PDF]
+[转换为Word]
+✅ 已生成 document.docx
+```
+
+#### 手动指定
+```
+You: 使用pdf skill读取 report.pdf
+
+Agent: [使用pdf skill]
+[读取内容]
+这是一份关于...的报告
+```
+
+### 2.5 查看已安装Skills
+
+```bash
+# 列出所有Skills
+openclaw skills list
+
+# 查看Skill详情
+openclaw skills info pdf
+
+# 更新Skills
+openclaw skills update
+
+# 卸载Skill
+openclaw skills uninstall weather
+```
+
+---
+
+## 第三部分：常用Skills实战（40分钟）
+
+### 3.1 PDF处理（pdf skill）
+
+#### 安装
+```bash
+openclaw skills install pdf
+```
+
+#### 功能演示
+
+**读取PDF：**
+```
+You: 读取 report.pdf 的内容
+
+Agent: [使用pdf skill]
+这份报告包含以下章节：
+1. 执行摘要
+2. 市场分析
+3. 财务预测
+...
+```
+
+**合并PDF：**
+```
+You: 把 part1.pdf 和 part2.pdf 合并成 complete.pdf
+
+Agent: [使用pdf skill]
+✅ 已合并为 complete.pdf
+- part1.pdf: 10页
+- part2.pdf: 15页
+- 总计: 25页
+```
+
+**拆分PDF：**
+```
+You: 把 document.pdf 的第1-5页提取出来
+
+Agent: [使用pdf skill]
+✅ 已提取为 document_pages_1-5.pdf
+```
+
+**OCR识别：**
+```
+You: 识别 scanned.pdf 中的文字
+
+Agent: [使用pdf skill + OCR]
+识别结果：
+这是一份扫描的合同文件...
+```
+
+### 3.2 Word文档（docx skill）
+
+#### 安装
+```bash
+openclaw skills install docx
+```
+
+#### 功能演示
+
+**创建简历：**
+```
+You: 帮我创建一份简历，包含：
+- 姓名：张三
+- 职位：软件工程师
+- 技能：Python, JavaScript, Docker
+
+Agent: [使用docx skill]
+✅ 已生成 resume.docx
+
+包含以下内容：
+- 个人信息
+- 工作经历
+- 技能清单
+- 教育背景
+```
+
+**编辑文档：**
+```
+You: 在 report.docx 中添加一个新章节
+
+Agent: [使用docx skill]
+✅ 已添加章节：结论与建议
+```
+
+**格式化：**
+```
+You: 给 document.docx 添加目录和页码
+
+Agent: [使用docx skill]
+✅ 已添加：
+- 自动目录（第1页）
+- 页码（页脚居中）
+```
+
+### 3.3 Excel处理（xlsx skill）
+
+#### 安装
+```bash
+openclaw skills install xlsx
+```
+
+#### 功能演示
+
+**读取数据：**
+```
+You: 读取 sales.xlsx 的数据
+
+Agent: [使用xlsx skill]
+销售数据汇总：
+- 总行数：150
+- 总销售额：¥1,234,567
+- 平均客单价：¥8,230
+```
+
+**数据分析：**
+```
+You: 分析 data.xlsx 中的销售趋势
+
+Agent: [使用xlsx skill]
+销售趋势分析：
+1. Q1销售额：¥300,000（同比+15%）
+2. Q2销售额：¥350,000（同比+20%）
+3. 增长最快的产品：产品A（+35%）
+```
+
+**生成报表：**
+```
+You: 根据 raw_data.xlsx 生成月度报表
+
+Agent: [使用xlsx skill]
+✅ 已生成 monthly_report.xlsx
+
+包含：
+- 数据透视表
+- 趋势图表
+- 汇总统计
+```
+
+### 3.4 天气查询（weather skill）
+
+#### 安装
+```bash
+openclaw skills install weather
+```
+
+#### 功能演示
+
+**查询天气：**
+```
+You: 北京今天天气怎么样？
+
+Agent: [使用weather skill]
+北京今日天气：
+🌤️ 多云
+🌡️ 温度：15°C / 25°C
+💨 风力：3级
+💧 湿度：45%
+```
+
+**天气预报：**
+```
+You: 上海未来三天的天气
+
+Agent: [使用weather skill]
+上海天气预报：
+
+明天（3月10日）：
+☀️ 晴 18-26°C
+
+后天（3月11日）：
+🌧️ 小雨 16-22°C
+
+大后天（3月12日）：
+⛅ 多云 17-24°C
+```
+
+---
+
+## 第四部分：飞书/Telegram集成预览（20分钟）
+
+### 4.1 飞书集成
+
+#### 功能概览
+- 文档读写（feishu_doc）
+- 知识库管理（feishu_wiki）
+- 云空间操作（feishu_drive）
+- 多维表格（feishu_bitable）
+
+#### 快速体验
+
+**读取飞书文档：**
+```
+You: 读取这个飞书文档的内容
+https://xxx.feishu.cn/docx/xxxxx
+
+Agent: [使用feishu_doc]
+文档标题：项目计划
+内容：
+1. 项目目标
+2. 时间安排
+3. 资源分配
+...
+```
+
+**创建飞书文档：**
+```
+You: 把这份报告发布到飞书
+
+Agent: [使用feishu_doc]
+✅ 已创建飞书文档
+📄 标题：月度报告
+🔗 链接：https://xxx.feishu.cn/docx/xxxxx
+```
+
+**详细配置将在第4课讲解**
+
+### 4.2 Telegram集成
+
+#### 功能概览
+- 消息收发
+- 文件传输
+- 命令响应
+- 群组管理
+
+#### 快速体验
+
+**发送消息：**
+```bash
+# 通过Telegram与Agent对话
+[Telegram] You: 你好
+
+[Telegram] Agent: 你好！有什么可以帮你的吗？
+```
+
+**文件处理：**
+```bash
+# 发送文件给Agent
+[Telegram] You: [上传 document.pdf]
+请帮我总结这个文档
+
+[Telegram] Agent: [处理文件]
+这是一份关于...的文档
+主要内容包括：
+1. ...
+2. ...
+```
+
+**详细配置将在第4课讲解**
+
+---
+
+## 第五部分：实战项目（30分钟）
+
+### 项目：自动生成Word简历
+
+#### 任务目标
+使用OpenClaw自动生成一份格式化的Word简历
+
+#### 步骤1：准备信息
+```
+You: 我要创建一份简历，信息如下：
+- 姓名：李明
+- 职位：全栈工程师
+- 邮箱：liming@example.com
+- 电话：138-0000-0000
+- 技能：Python, JavaScript, React, Node.js, Docker
+- 工作经历：
+  1. ABC公司（2020-2023）- 高级工程师
+  2. XYZ公司（2018-2020）- 工程师
+```
+
+#### 步骤2：生成简历
+```
+Agent: [使用docx skill]
+正在生成简历...
+
+✅ 已生成 李明_简历.docx
+
+包含以下部分：
+- 个人信息（带照片位置）
+- 求职意向
+- 技能清单
+- 工作经历
+- 教育背景
+- 项目经验
+```
+
+#### 步骤3：优化格式
+```
+You: 帮我优化一下格式，添加：
+- 页眉：姓名和联系方式
+- 技能部分用图标
+- 工作经历用时间轴
+
+Agent: [优化文档]
+✅ 已优化格式
+
+更新内容：
+- ✅ 添加页眉
+- ✅ 技能图标化
+- ✅ 时间轴样式
+```
+
+#### 步骤4：导出PDF
+```
+You: 把简历导出为PDF
+
+Agent: [使用pdf skill]
+✅ 已导出 李明_简历.pdf
+```
+
+#### 完整代码示例
+```bash
+# 一键生成简历
+openclaw chat "
+创建一份简历：
+姓名：李明
+职位：全栈工程师
+技能：Python, JavaScript, React, Node.js
+工作经历：
+- ABC公司（2020-2023）高级工程师
+- XYZ公司（2018-2020）工程师
+
+要求：
+1. 使用专业模板
+2. 添加技能图标
+3. 导出Word和PDF两种格式
+"
+```
+
+---
+
+## 第六部分：作业与练习（课后）
+
+### 作业1：安装Skills（必做）
+
+**任务：**
+安装至少3个Skills并测试功能
+
+**推荐组合：**
+- pdf + docx + xlsx（文档处理）
+- weather + codex-deep-search（实用工具）
+
+**验收标准：**
+```bash
+openclaw skills list
+# 应显示至少3个已安装的Skills
+```
+
+### 作业2：文档处理实战（必做）
+
+**任务：**
+完成以下任意一个任务：
+
+**选项A：PDF处理**
+1. 下载3个PDF文件
+2. 合并成一个PDF
+3. 提取第1-5页
+4. 添加水印
+
+**选项B：Word文档**
+1. 创建一份项目计划文档
+2. 包含：目录、章节、表格、图片
+3. 导出为PDF
+
+**选项C：Excel分析**
+1. 创建一份销售数据表
+2. 添加公式计算总计
+3. 生成图表
+4. 导出为PDF
+
+**提交：**
+- 截图展示过程
+- 提交生成的文件
+
+### 作业3：自定义工作流（选做）
+
+**任务：**
+设计一个自动化工作流，例如：
+
+**示例1：每日报告生成**
+1. 读取多个数据源
+2. 汇总分析
+3. 生成Word报告
+4. 发送到飞书
+
+**示例2：文档批处理**
+1. 批量读取PDF
+2. 提取关键信息
+3. 生成Excel汇总表
+4. 发送邮件通知
+
+**提交：**
+- 工作流设计文档
+- 实现代码或命令
+- 运行结果截图
+
+---
+
+## 第七部分：常见问题（10分钟）
+
+### Q1：Skill安装失败怎么办？
+
+**A1：**
+```bash
+# 检查网络连接
+ping github.com
+
+# 使用国内镜像
+export OPENCLAW_SKILLS_MIRROR=https://gitee.com/openclaw-skills
+
+# 手动克隆
+git clone https://github.com/openclaw/skill-pdf ~/.openclaw/skills/pdf
+openclaw gateway restart
+```
+
+### Q2：如何查看Skill的使用方法？
+
+**A2：**
+```bash
+# 查看Skill信息
+openclaw skills info pdf
+
+# 读取SKILL.md
+cat ~/.openclaw/skills/pdf/SKILL.md
+
+# 或直接问Agent
+openclaw chat "pdf skill有哪些功能？"
+```
+
+### Q3：Skill执行失败怎么办？
+
+**A3：**
+```bash
+# 查看详细日志
+openclaw gateway logs --level debug
+
+# 检查依赖
+cd ~/.openclaw/skills/pdf
+npm install
+
+# 重新安装Skill
+openclaw skills uninstall pdf
+openclaw skills install pdf
+```
+
+### Q4：如何开发自己的Skill？
+
+**A4：**
+将在第12课详细讲解，基本步骤：
+1. 创建Skill目录结构
+2. 编写SKILL.md
+3. 添加脚本和资源
+4. 测试和调试
+5. 发布到社区
+
+### Q5：browser工具需要安装浏览器吗？
+
+**A5：**
+```bash
+# 检查浏览器状态
+openclaw browser status
+
+# 如果需要，安装Chromium
+# Linux
+sudo apt install chromium-browser
+
+# macOS
+brew install chromium
+
+# 或使用系统浏览器
+# OpenClaw会自动检测并使用
+```
+
+---
+
+## 第八部分：扩展阅读
+
+### 推荐资源
+
+#### Skills开发
+- Skill Creator Guide: https://docs.openclaw.ai/skills/creator
+- Skills Hub: https://clawhub.com
+- 示例Skills: https://github.com/openclaw/skills
+
+#### 工具文档
+- Browser控制: https://docs.openclaw.ai/tools/browser
+- 文件操作: https://docs.openclaw.ai/tools/files
+- 命令执行: https://docs.openclaw.ai/tools/exec
+
+#### 社区资源
+- Discord: https://discord.com/invite/clawd
+- GitHub Discussions: https://github.com/openclaw/openclaw/discussions
+
+### 下节课预告
+
+**第4课：多渠道接入 - 让AI无处不在**
+- 飞书集成完整配置
+- Telegram Bot创建
+- WhatsApp/Discord接入
+- 多渠道消息同步
+
+---
+
+## 课程总结
+
+### 本节课你学到了：
+✅ 内置工具的使用（read/write/exec/browser/web_fetch）  
+✅ Skills系统的工作原理  
+✅ 常用Skills的安装和使用  
+✅ 文档处理实战技巧  
+✅ 飞书/Telegram集成预览  
+
+### 关键要点：
+1. **工具是基础** - 掌握内置工具是使用OpenClaw的前提
+2. **Skills是扩展** - 通过Skills扩展Agent的专业能力
+3. **实战是关键** - 多动手练习才能真正掌握
+4. **组合是艺术** - 灵活组合工具和Skills解决复杂问题
+
+### 下一步：
+1. 完成作业1和作业2（必做）
+2. 尝试作业3（选做）
+3. 探索更多Skills
+4. 准备学习第4课（多渠道接入）
+
+---
+
+**课程反馈：**
+如有问题或建议，请在GitHub提Issue或加入社区讨论。
+
+**下节课见！** 🚀
+
+---
+
+## 第九部分：Skills实战案例（新增）
+
+### 9.1 安全防护实战
+
+#### 安装安全三件套
+```bash
+# 1. Skill Vetter（安装前扫描）
+npx skills add skill-vetter -g -y
+
+# 2. 运行Security Scanner
+openclaw chat "扫描已安装的Skills安全等级"
+
+# 3. 应用100/3法则
+# 只安装：下载量>100次 + 发布时间>3个月
+```
+
+#### 安全扫描示例
+```
+You: 扫描我的Skills安全状态
+
+Agent: [使用Skill Vetter]
+✅ 安全扫描完成
+
+结果：
+- agent-browser: 🟢 SAFE
+- gog: 🟢 SAFE
+- summarize: 🟢 SAFE
+- unknown-skill: 🔴 DANGEROUS（建议卸载）
+
+发现1个危险Skill，已隔离处理。
+```
+
+### 9.2 Capability Evolver实战
+
+#### 让AI自我进化
+```
+You: /evolve
+
+Agent: [分析历史对话]
+正在分析你的使用习惯...
+
+发现以下重复任务：
+1. 每天检查邮件（10次/天）
+2. 生成日报（1次/天）
+3. 搜索技术文章（5次/天）
+
+建议生成新Skills：
+1. email-automator（邮件自动化）
+2. daily-report-generator（日报生成器）
+3. tech-news-collector（技术新闻收集器）
+
+是否生成这些Skills？
+```
+
+#### 自动生成的Skill示例
+```javascript
+// email-automator.js（AI自动生成）
+module.exports = {
+  name: "email-automator",
+  description: "自动处理日常邮件",
+  execute: async (context) => {
+    // 检查未读邮件
+    const emails = await checkUnreadEmails();
+    
+    // 分类处理
+    for (const email of emails) {
+      if (isImportant(email)) {
+        await notifyUser(email);
+      } else if (isSpam(email)) {
+        await archiveEmail(email);
+      } else {
+        await summarizeAndSave(email);
+      }
+    }
+  }
+};
+```
+
+### 9.3 Agent Browser实战
+
+#### 自动化网页操作
+```
+You: 帮我在GitHub上创建一个新仓库
+
+Agent: [使用agent-browser]
+1. 打开 https://github.com/new
+2. 填写仓库名称：my-project
+3. 选择公开/私有
+4. 添加README
+5. 点击创建
+
+✅ 仓库已创建：https://github.com/yourname/my-project
+```
+
+#### 网站测试自动化
+```
+You: 测试 https://example.com 的登录功能
+
+Agent: [使用dogfood skill]
+测试计划：
+1. 打开登录页面
+2. 输入测试账号
+3. 点击登录按钮
+4. 验证登录成功
+5. 检查错误处理
+
+测试结果：
+✅ 登录功能正常
+✅ 错误处理正常
+⚠️ 密码强度提示不明显
+```
+
+### 9.4 Obsidian集成实战
+
+#### 连接Obsidian笔记库
+```bash
+# 安装Obsidian Skill
+npx skills add obsidian -g -y
+```
+
+#### 配置Obsidian路径
+```json
+{
+  "skills": {
+    "obsidian": {
+      "vaultPath": "~/Documents/Obsidian/MyVault",
+      "autoSync": true,
+      "indexInterval": "1h"
+    }
+  }
+}
+```
+
+#### 使用示例
+```
+You: 在我的Obsidian笔记中搜索关于OpenClaw的内容
+
+Agent: [搜索Obsidian笔记库]
+找到3篇相关笔记：
+
+1. OpenClaw安装指南（2026-03-01）
+   路径：技术/AI/OpenClaw/安装.md
+   摘要：详细记录了安装步骤...
+
+2. Skills使用心得（2026-03-05）
+   路径：技术/AI/OpenClaw/Skills.md
+   摘要：总结了30+核心Skills...
+
+3. 自动化工作流设计（2026-03-08）
+   路径：技术/AI/OpenClaw/工作流.md
+   摘要：设计了3个自动化工作流...
+```
+
+### 9.5 语音交互实战
+
+#### 安装语音Skills
+```bash
+# 安装NoizAI语音Skills
+cd ~/.openclaw/skills
+git clone https://github.com/NoizAI/skills.git noizai-skills
+openclaw gateway restart
+```
+
+#### 配置语音识别
+```json
+{
+  "skills": {
+    "voice-command": {
+      "enabled": true,
+      "language": "zh-CN",
+      "wakeWord": "Hey OpenClaw",
+      "autoTranscribe": true
+    }
+  }
+}
+```
+
+#### 使用示例
+```
+[语音] "Hey OpenClaw，帮我查一下今天的天气"
+
+Agent: [语音识别]
+正在查询天气...
+
+[语音回复]
+今天北京天气晴朗，温度15-25°C，空气质量良好。
+```
+
+### 9.6 工作流编排实战
+
+#### 创建自动化工作流
+```
+You: 创建一个每天早上8点的自动化工作流
+
+Agent: [使用Clawflows]
+工作流设计：
+
+1. 时间：每天08:00
+2. 步骤：
+   - 检查未读邮件（Gog）
+   - 查询今日日程（Google Calendar）
+   - 搜索行业新闻（Exa Web Search）
+   - 生成每日简报（Summarize）
+   - 发送到Telegram（Telegram Bot）
+3. 异常处理：
+   - 失败重试3次
+   - 发送告警通知
+
+✅ 工作流已创建：daily-morning-briefing
+```
+
+#### 工作流执行示例
+```
+[每天08:00自动执行]
+📊 每日简报（2026-03-09）
+
+邮件：
+- 未读：3封（2封重要）
+- 待回复：2封
+
+日程：
+- 10:00 团队站会
+- 14:00 项目评审
+- 16:00 客户沟通
+
+新闻：
+- AI领域新突破（来源：TechCrunch）
+- OpenClaw 2.0发布（来源：官方博客）
+
+今日建议：
+1. 优先回复重要邮件
+2. 准备项目评审材料
+3. 关注AI新进展
+```
+
+---
+
+## 第十部分：Skills最佳实践（新增）
+
+### 10.1 安装策略
+
+#### 渐进式安装
+```
+第1周：安全三件套 + Top 5
+第2周：根据工作场景选择分类
+第3周：工作流编排
+第4周：AI自进化
+```
+
+#### 权限管理
+```
+最小权限原则：
+- 只授予必要的权限
+- 定期审查权限使用
+- 及时撤销未使用的权限
+```
+
+### 10.2 性能优化
+
+#### 批量处理
+```javascript
+// 优化前：每次调用API
+for (const item of items) {
+  await processItem(item);  // 多次API调用
+}
+
+// 优化后：批量处理
+const batches = chunk(items, 10);  // 每批10个
+for (const batch of batches) {
+  await processBatch(batch);  // 减少API调用
+}
+```
+
+#### 缓存策略
+```json
+{
+  "cache": {
+    "enabled": true,
+    "ttl": "1h",
+    "maxSize": "500MB",
+    "strategies": {
+      "search": "5m",
+      "summary": "1h",
+      "data": "24h"
+    }
+  }
+}
+```
+
+### 10.3 故障排查
+
+#### 常见问题
+```
+1. Skill安装失败
+   - 检查网络连接
+   - 验证权限
+   - 查看日志
+
+2. Skill执行错误
+   - 检查配置
+   - 验证依赖
+   - 查看错误日志
+
+3. 性能问题
+   - 检查并发限制
+   - 优化批量处理
+   - 启用缓存
+```
+
+#### 调试命令
+```bash
+# 查看Skill日志
+openclaw gateway logs | grep "skill"
+
+# 检查Skill状态
+openclaw chat "检查Skills运行状态"
+
+# 测试单个Skill
+openclaw chat "测试agent-browser功能"
+```
+
+---
+
+## 作业与练习（新增）
+
+### 作业4：Skills实战（必做）
+
+**任务：** 完成以下任意一个实战项目
+
+**选项A：自动化邮件处理**
+1. 安装Gog Skill
+2. 配置邮件自动分类
+3. 设置每日摘要
+4. 测试自动化流程
+
+**选项B：浏览器自动化**
+1. 安装Agent Browser
+2. 自动化一个网站操作
+3. 创建测试脚本
+4. 验证执行结果
+
+**选项C：知识库集成**
+1. 安装Obsidian Skill
+2. 连接你的笔记库
+3. 实现知识搜索
+4. 测试集成效果
+
+**提交：**
+- 配置文件
+- 操作截图
+- 测试结果
+- 问题总结
+
+---
+
+## 扩展阅读
+
+### 推荐资源
+
+#### 官方文档
+- Skills开发指南：https://docs.openclaw.ai/skills
+- API参考：https://docs.openclaw.ai/api
+- 最佳实践：https://docs.openclaw.ai/best-practices
+
+#### 社区资源
+- ClawHub：https://clawhub.com
+- Skills.sh：https://skills.sh
+- GitHub仓库：https://github.com/openclaw/skills
+
+#### 相关课程
+- 第12课：自定义Skill开发
+- 第14课：个人知识管理系统
+- 第15课：AI驱动的工作助手
+
+---
+
+**恭喜完成Skills系统学习！** 🎉
+
+**下一步：**
+1. 实践所学Skills
+2. 开发自定义Skills
+3. 优化工作流程
+4. 分享最佳实践
+
+---
+
+© 2026 OpenClaw课程 | 第3课补充内容
