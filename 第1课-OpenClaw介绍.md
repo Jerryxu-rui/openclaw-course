@@ -4,8 +4,8 @@
 **难度：** 入门  
 **目标：** 全面理解OpenClaw的价值和应用场景
 
-![OpenClaw系统架构](images/common/openclaw-architecture.jpg)
-*图：OpenClaw系统架构 - 一站式AI Agent平台*
+![OpenClaw系统架构](images/common/openclaw-architecture.txt)
+*图：OpenClaw系统架构 - 一站式AI Agent平台（图片待补充）*
 
 ---
 
@@ -199,8 +199,8 @@ AI Agent：你设定目标 → AI持续工作 → 主动汇报
 
 ## 二、OpenClaw核心架构
 
-![OpenClaw技术架构](images/common/technical-architecture.jpg)
-*图：OpenClaw技术架构 - 详细的技术架构和部署方案*
+![OpenClaw技术架构](images/common/technical-architecture.txt)
+*图：OpenClaw技术架构 - 详细的技术架构和部署方案（图片待补充）*
 
 ### 2.1 系统架构图
 
