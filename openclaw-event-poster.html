@@ -117,6 +117,34 @@
             opacity: 0.1;
         }
         
+        .club-logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .club-logo {
+            height: 80px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+            transition: transform 0.3s ease;
+        }
+        
+        .club-logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .club-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+            letter-spacing: 2px;
+        }
+        
         .logo {
             font-family: 'Orbitron', monospace;
             font-size: 4.5rem;
@@ -370,6 +398,31 @@
             }
         }
         
+        .contact-method {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            min-width: 150px;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-method:hover {
+            background: rgba(0, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .contact-method i {
+            font-size: 2.5rem;
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+        
+        .contact-method p {
+            font-weight: 600;
+            color: white;
+        }
+        
         @media (max-width: 480px) {
             .header {
                 padding: 20px;
@@ -390,6 +443,19 @@
             .section-title {
                 font-size: 1.5rem;
             }
+            
+            .club-name {
+                font-size: 1.5rem;
+            }
+            
+            .club-logo {
+                height: 60px;
+            }
+            
+            .contact-method {
+                min-width: 120px;
+                padding: 15px;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -399,9 +465,13 @@
     
     <div class="poster-container">
         <div class="header">
+            <div class="club-logo-container">
+                <img src="images/club-logo.png" alt="高金MBA人工智能俱乐部" class="club-logo">
+                <div class="club-name">高金MBA人工智能俱乐部</div>
+            </div>
             <div class="logo">OpenClaw</div>
-            <div class="subtitle">AI智能助手俱乐部</div>
-            <h1 class="event-title">免费安装活动</h1>
+            <div class="subtitle">AI智能助手免费安装活动</div>
+            <h1 class="event-title">技术工作坊</h1>
         </div>
         
         <div class="content">
@@ -534,27 +604,61 @@
             </div>
             
             <div class="cta-section">
-                <h2 class="cta-title">立即报名参加！</h2>
+                <h2 class="cta-title">报名方式</h2>
                 <p style="font-size: 1.2rem; margin-bottom: 30px; color: rgba(255, 255, 255, 0.9);">
-                    名额有限，仅限30人！扫描二维码或点击按钮报名
+                    名额有限，仅限30人！请通过以下方式报名
                 </p>
                 
-                <a href="#" class="cta-button" onclick="alert('报名链接即将开放，请关注俱乐部通知！')">
-                    <i class="fas fa-rocket" style="margin-right: 10px;"></i>
-                    立即报名
-                </a>
+                <div style="background: rgba(0, 255, 255, 0.1); border-radius: 20px; padding: 30px; margin-bottom: 30px; border: 2px solid rgba(0, 255, 255, 0.3);">
+                    <h3 style="color: #00ffff; font-size: 1.8rem; margin-bottom: 20px; text-align: center;">
+                        <i class="fas fa-comment-dots" style="margin-right: 10px;"></i>
+                        报名请私信
+                    </h3>
+                    <p style="font-size: 1.1rem; line-height: 1.8; text-align: center; margin-bottom: 20px;">
+                        请通过俱乐部官方渠道私信报名<br>
+                        提供：姓名 + 专业/班级 + 联系方式
+                    </p>
+                    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                        <div style="text-align: center;">
+                            <div class="contact-method">
+                                <i class="fas fa-user-tie" style="font-size: 2.5rem; color: #00ffff; margin-bottom: 10px;"></i>
+                                <p style="font-weight: 600;">俱乐部负责人</p>
+                            </div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="contact-method">
+                                <i class="fas fa-comments" style="font-size: 2.5rem; color: #ff00ff; margin-bottom: 10px;"></i>
+                                <p style="font-weight: 600;">微信群联系</p>
+                            </div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="contact-method">
+                                <i class="fas fa-envelope" style="font-size: 2.5rem; color: #00ffff; margin-bottom: 10px;"></i>
+                                <p style="font-weight: 600;">邮件报名</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
-                <div class="qr-code" style="margin-top: 40px;"></div>
+                <div class="qr-code" style="margin-top: 20px; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <div style="color: #0a0a2a; font-family: 'Orbitron', monospace; font-weight: 700; font-size: 1.2rem; margin-bottom: 10px;">
+                        俱乐部微信群
+                    </div>
+                    <div style="color: #0a0a2a; font-size: 0.9rem; text-align: center;">
+                        扫码加入了解更多
+                    </div>
+                </div>
                 <p style="margin-top: 10px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);">
-                    扫描二维码加入活动群
+                    扫描二维码加入俱乐部微信群
                 </p>
             </div>
         </div>
         
         <div class="footer">
-            <p>主办：OpenClaw AI智能助手俱乐部</p>
-            <p>技术支持：DeepSeek AI & OpenClaw社区</p>
-            <p>© 2026 OpenClaw Club. All rights reserved.</p>
+            <p>主办：<strong>高金MBA人工智能俱乐部</strong></p>
+            <p>活动：OpenClaw AI智能助手免费安装技术工作坊</p>
+            <p>技术支持：DeepSeek AI & OpenClaw开源社区</p>
+            <p>© 2026 高金MBA人工智能俱乐部. All rights reserved.</p>
         </div>
     </div>
 
