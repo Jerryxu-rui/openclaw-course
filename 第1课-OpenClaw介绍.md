@@ -4,17 +4,12 @@
 **难度：** 入门  
 **目标：** 全面理解OpenClaw的价值和应用场景
 
-![OpenClaw橙皮书封面](images/orange-book/orange-book-cover.jpg)
-*图：OpenClaw橙皮书封面 - 一站式参考手册*
+![OpenClaw系统架构](images/common/openclaw-architecture.jpg)
+*图：OpenClaw系统架构 - 一站式AI Agent平台*
 
 ---
 
-## 📘 来自OpenClaw橙皮书的权威定义
-
-> **来源**：OpenClaw橙皮书 01 - OpenClaw是什么  
-> **作者**：花叔（AI进化论-花生）  
-> **版本**：v1.0 (2026年3月)  
-> **创建工具**：Claude Code辅助整理编写
+## 📘 OpenClaw权威定义
 
 ### OpenClaw 是什么？
 
@@ -53,9 +48,7 @@
 
 ## 🔥 为什么OpenClaw这么火？
 
-> **来源**：OpenClaw橙皮书 04 - 为什么这么火  
-> **作者**：花叔（AI进化论-花生）  
-> **版本**：v1.0 (2026年3月)
+
 
 ### 惊人的增长数据
 
@@ -169,9 +162,7 @@ AI Agent：你设定目标 → AI持续工作 → 主动汇报
 
 ## 📜 OpenClaw发展简史
 
-> **来源**：OpenClaw橙皮书 02 - 发展简史  
-> **作者**：花叔（AI进化论-花生）  
-> **版本**：v1.0 (2026年3月)
+
 
 ### 关键里程碑
 
@@ -208,8 +199,8 @@ AI Agent：你设定目标 → AI持续工作 → 主动汇报
 
 ## 二、OpenClaw核心架构
 
-![OpenClaw橙皮书内容页](images/orange-book/orange-book-content.jpg)
-*图：OpenClaw橙皮书内容页 - 详细的技术架构和部署方案*
+![OpenClaw技术架构](images/common/technical-architecture.jpg)
+*图：OpenClaw技术架构 - 详细的技术架构和部署方案*
 
 ### 2.1 系统架构图
 
@@ -841,9 +832,7 @@ OpenClaw：
 
 ## 👨💻 创始人故事
 
-> **来源**：OpenClaw橙皮书 03 - 创始人故事  
-> **作者**：花叔（AI进化论-花生）  
-> **版本**：v1.0 (2026年3月)
+
 
 ### Peter Steinberger：从独立开发者到AI先锋
 
