@@ -505,7 +505,52 @@ sudo nano /etc/logrotate.d/openclaw
 
 ## 第四部分：安全加固（30分钟）
 
-### 4.1 认证配置
+### 4.1 用户认证与Session管理
+
+OpenClaw通过DM配对、白名单和群组规则三层机制识别用户身份，并在Session层面隔离不同来源的上下文。
+
+#### DM配对策略（默认认证策略）
+
+当一个未知发送者通过任意渠道向你的Agent发送私聊消息时：
+
+1. **生成配对码** - Agent回复一个一次性配对码（6位数字）
+2. **等待验证** - 消息不会被处理，Agent进入等待状态。所有后续消息也会被挂起
+3. **主人批准** - 你在已配对的渠道中输入配对码批准该用户，或者直接拒绝
+
+**注意**：DM配对是防止陌生人滥用的关键机制。关闭它意味着任何知道你WhatsApp/Telegram号码的人都可以无限制地使用你的Agent（和你的API额度）。
+
+#### 白名单机制（allowFrom）
+
+在Agent配置中，`allowFrom`字段可以预先授权特定用户，跳过配对流程：
+
+```yaml
+# AGENTS.md 配置示例
+allowFrom:
+- telegram:123456789
+- whatsapp:+8613800138000
+- discord:user#1234
+```
+
+白名单中的用户发消息时直接进入对话，无需配对。
+
+#### 群组规则（requireMention）
+
+在群聊场景下，Agent默认使用`requireMention`策略：
+- 只响应`@Agent名称`的消息，忽略其他群聊内容
+- 可以切换为`always`模式（响应所有消息），但会消耗大量token
+- 对应聊天命令：`/activation mention|always`
+
+#### Session隔离（Context Isolation）
+
+| 场景 | Session行为 | MEMORY.md |
+|------|-------------|-----------|
+| 私聊（DM） | 所有已配对用户的私聊折叠到共享的main session | 加载 |
+| 群组 | 每个群组默认使用独立的隔离session | 不加载 |
+| 跨渠道 | 同一用户在Telegram和WhatsApp的私聊共享main session | 加载 |
+
+**设计意图**：私聊是「你和Agent的私密空间」，所有记忆和偏好都在这里积累。群组是公共场合，Agent不会泄露你在私聊中说过的内容。
+
+### 4.2 认证配置
 
 #### Token认证
 ```json
