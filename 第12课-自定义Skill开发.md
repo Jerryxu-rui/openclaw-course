@@ -28,6 +28,36 @@ my-skill/
 ```markdown
 # My Skill
 
+### 1.3 Skills工作原理
+
+Skills是OpenClaw的能力扩展单元。理解它的加载机制，才能真正用好这个系统。
+
+#### 三层优先级
+OpenClaw的Skill有三个来源，按优先级从高到低排列：
+
+| 优先级 | 位置 | 说明 |
+|--------|------|------|
+| 最高 | `<workspace>/skills/` | 项目级Skills，只对当前工作区生效。适合针对特定项目定制的能力。 |
+| 中 | `~/.openclaw/skills/` | 用户级Skills，全局生效。通过ClawHub安装或手动放置的Skills都在这里。 |
+| 最低 | bundled skills | 内置的55个Skills，随OpenClaw版本发布。不需要安装，开箱即用。 |
+
+**核心建议**：如果同名Skill存在于多个层级，高优先级会覆盖低优先级。这意味着你可以在workspace级别「重写」一个内置Skill的行为，而不影响其他项目。
+
+#### Skill加载过程
+当OpenClaw启动或收到消息时，Skills的加载遵循以下流程：
+
+1. **读取Skill元数据**：扫描三层目录，读取每个Skill的`SKILL.md`文件，解析名称、描述、触发条件、所需环境变量等元信息。
+2. **应用环境变量**：如果Skill声明了需要的API Key或环境变量（如`GITHUB_TOKEN`），系统会从`openclaw.json`的`env`字段中注入。缺少必要变量的Skill会被静默跳过。
+3. **构建System Prompt**：将所有可用Skills的描述注入到system prompt中，告知模型当前可以调用哪些能力。这是模型「知道自己能做什么」的关键步骤。
+4. **运行后恢复**：Skill执行完毕后，恢复原始环境变量和上下文状态，避免Skill之间互相干扰。
+
+#### ClawHub注册表
+ClawHub（clawhub.com）是OpenClaw的官方Skill注册表，类似npm之于Node.js。它提供：
+- 公共Skills的发布和版本管理
+- 基于向量搜索的Skill发现
+- 下载量统计和社区评分
+- VirusTotal合作的安全扫描（但覆盖率有限）
+
 ## 功能
 这个Skill可以做什么
 
