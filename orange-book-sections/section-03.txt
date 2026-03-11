@@ -1,0 +1,31 @@
+03
+
+创始人故事
+
+The Creator
+
+Peter Steinberger：从周末项目到全球最火开源项目，再到加入OpenAI。
+
+从一个人到一个社区
+
+Peter Steinberger是一位奥地利开发者，在iOS和macOS开发圈有很高的知名度。2025年11月的一个周末，他
+写了一个能连接即时通讯平台的AI助手小工具，取名ClawdBot。
+他大概没有想到，这个周末项目会在两个月后成为GitHub上增长最快的开源项目。到2026年3月，他个人在这
+个项目上提交了11,684次commit，贡献者超过1,075人。
+
+加入OpenAI
+
+2026年2月14日，Peter宣布加入OpenAI。Sam Altman亲自发推欢迎，称他为「genius」。
+这个决定引发了社区的广泛讨论。但Peter做了几件事来消除担忧：
+OpenClaw转为开源基金会运营，保持项目独立
+OpenAI作为赞助商之一（与Vercel、Blacksmith、Convex并列），但不控制项目方向
+OpenAI承诺让他继续投入OpenClaw的开发
+Peter的原话：「I'm a builder at heart... What I want is to change the world, not build a large company.」
+（我骨子里是个建造者。我想改变世界，而不是建一家大公司。）
+
+关于名字的故事
+
+ClawdBot这个名字来自对Anthropic Claude的致敬（Claw=爪子），所以选了龙虾作为吉祥物。Anthropic的商
+标警告迫使他改名为Moltbot（Molt=龙虾蜕壳），三天后又改为OpenClaw，强调开源属性。虽然经历了两次改
+名，龙虾的形象始终保留，也成了整个社区的文化符号。
+

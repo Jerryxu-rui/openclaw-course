@@ -1,0 +1,617 @@
+15
+
+渠道概览
+
+Channel Overview
+
+OpenClaw 通过 Gateway 架构统一连接 20+ 聊天平台。所有渠道共享同一套三步接入模式：创建凭证
+→ 写入配置 → 启动 Gateway。
+
+统一接入流程
+在平台创建凭证
+
+→ 写入 openclaw.yaml → 启动 Gateway → 完成配对
+
+可以同时运行多个 channel，消息自动路由到对应平台。配对模式（ dmPolicy: pairing ）默认启用，未知发
+送者需要验证码才能与 bot 对话。
+
+完整平台列表
+渠道
+
+SDK / 实现
+
+类型
+
+难度
+
+耗时
+
+Telegram
+
+grammY
+
+内置
+
+极简
+
+5 分钟
+
+Discord
+
+discord.js
+
+内置
+
+简单
+
+15-20 分钟
+
+WhatsApp
+
+Baileys
+
+内置
+
+中等
+
+10-15 分钟
+
+Slack
+
+Bolt
+
+内置
+
+中等
+
+25-40 分钟
+
+Signal
+
+Signal-CLI
+
+内置
+
+中等
+
+20-30 分钟
+
+iMessage
+
+BlueBubbles
+
+扩展
+
+中等偏难
+
+30-45 分钟
+
+Google Chat
+
+官方 API
+
+内置
+
+中等
+
+15-20 分钟
+
+LINE
+
+官方 API
+
+扩展
+
+中等
+
+15-20 分钟
+
+Microsoft Teams
+
+官方 API
+
+扩展
+
+中等
+
+20-30 分钟
+
+Matrix
+
+协议实现
+
+扩展
+
+中等
+
+15-20 分钟
+
+Mattermost
+
+官方 API
+
+扩展
+
+中等
+
+15-20 分钟
+
+IRC
+
+协议实现
+
+扩展
+
+中等
+
+10-15 分钟
+
+Nostr
+
+协议实现
+
+扩展
+
+中等
+
+15-20 分钟
+
+Twitch
+
+官方 API
+
+扩展
+
+中等
+
+15-20 分钟
+
+Synology Chat
+
+官方 API
+
+扩展
+
+中等
+
+15-20 分钟
+
+BlueBubbles
+
+API
+
+扩展
+
+中等偏难
+
+30-45 分钟
+
+Zalo
+
+API
+
+扩展
+
+中等
+
+15-20 分钟
+
+Nextcloud Talk
+
+API
+
+扩展
+
+中等
+
+15-20 分钟
+
+Tlon
+
+协议实现
+
+扩展
+
+中等
+
+15-20 分钟
+
+QQ
+
+官方插件
+
+插件
+
+简单
+
+5 分钟
+
+飞书
+
+官方 API
+
+内置插件
+
+中等
+
+15-20 分钟
+
+渠道
+
+SDK / 实现
+
+类型
+
+难度
+
+耗时
+
+钉钉
+
+社区插件
+
+插件
+
+中等
+
+20-30 分钟
+
+企业微信
+
+社区插件
+
+插件
+
+中等
+
+20-30 分钟
+
+微信（个人）
+
+社区 / 第三方
+
+插件
+
+复杂
+
+1 小时+
+
+新手推荐排序
+从易到难推荐：Telegram（最简单，5分钟零门槛）→ QQ（国内首选，扫码即用）→ Discord（社区场景佳）
+→ 飞书（国内企业）→ 钉钉（社区插件成熟）→ WhatsApp（海外日常通讯）
+梯队
+
+平台
+
+推荐理由
+
+第一梯
+队
+5-10 分
+钟
+
+Telegram、QQ
+
+Telegram 不需公网 IP、不需反向代理，本地 long-polling 即可运行。QQ
+有腾讯官方支持，扫码 1 分钟绑定。
+
+第二梯
+队
+15-20
+分钟
+
+Discord、飞书
+
+Discord 文档齐全，权限设置步骤略多但清晰。飞书自 OpenClaw 2026.2
+起内置支持，适合国内企业。
+
+第三梯
+队
+25-40
+分钟
+
+WhatsApp、Slack、钉
+钉、企业微信
+
+WhatsApp 最受欢迎但 session 可能过期。Slack 权限配置较多。钉钉和
+企业微信社区插件成熟。
+
+第四梯
+队
+需额外
+条件
+
+iMessage、微信个人号
+
+iMessage 需要 Mac 常开运行 BlueBubbles。微信个人号没有官方 API，
+封号风险始终存在。
+
+16
+
+国际平台接入
+
+International Platforms
+
+本章覆盖六大国际平台的详细接入步骤。每个平台从创建凭证到完成对话的全流程。
+
+Telegram 推荐入门 · 5 分钟 · 零门槛
+
+Telegram 是 OpenClaw 官方推荐的入门渠道。使用 long-polling 模式，bot 主动轮询 Telegram 服务器拉取消
+息，不需要公网 IP、反向代理或端口转发。本地开发、NAT 后面、防火墙内都能正常工作。
+1 找到 @BotFather
+在 Telegram 搜索 @BotFather ，这是 Telegram 官方的 Bot 管理工具。向它发送 /newbot 命令。
+2
+
+3
+
+创建 Bot
+按提示设置 bot 的显示名称和 username（必须以 bot 结尾，如 my_openclaw_bot ）。创建成功后，
+BotFather 会返回一个 Bot Token。
+配置到 OpenClaw
+将 Token 写入 openclaw.yaml ：
+channels:
+telegram:
+enabled: true
+botToken: "YOUR_BOT_TOKEN"
+dmPolicy: pairing #
+
+需配对码才能使用
+
+4
+
+启动并配对
+重启 Gateway。在 Telegram 中给你的 bot 发送任意消息，Gateway 会返回配对码，输入后即可开始对
+话。
+核心建议
+
+Telegram 的 Bot API 9.5（2026年3月）新增了 sendMessageDraft 功能。国内用户需要代理访问
+Telegram，但 bot 运行本身不受影响——只要运行 Gateway 的机器能访问 api.telegram.org 即可。
+
+Discord 社区场景首选 · 15-20 分钟
+
+Discord 适合社区管理和团队协作场景。需要在 Developer Portal 创建 Application 和 Bot，权限设置步骤稍多
+但文档齐全。
+1 创建 Application
+前往 discord.com/developers/applications ，点击 New Application，填写应用名称。
+2
+
+3
+
+4
+
+5
+
+6
+
+获取 Bot Token
+进入 Bot 页面，点击 Reset Token，复制生成的 Token。
+启用 Privileged Intents
+在 Bot 页面开启两个权限：Message Content Intent 和 Server Members Intent。没有这两个权限 bot
+无法读取消息内容。
+邀请 Bot 到服务器
+在 OAuth2 → URL Generator 中勾选 bot scope 和所需权限，生成邀请链接，将 bot 添加到你的
+Discord 服务器。
+获取 ID 并配置
+在 Discord 中开启 Developer Mode（设置 → 高级 → 开发者模式），右键复制 Server ID 和你的 User
+ID。将这些信息写入 openclaw.yaml ，启动 Gateway。
+DM 配对
+在 Discord 中私聊你的 bot，输入配对码（1 小时有效）完成绑定。
+核心建议
+
+v2026.3.7 新增了 ACP 持久化频道绑定——Discord 频道和 Telegram 话题的绑定在 Gateway 重启后依然保
+持，不需要重新配对。
+
+WhatsApp 日常通讯 · 10-15 分钟
+
+WhatsApp 是 OpenClaw 社区中最受欢迎的渠道。使用 Baileys 库通过 QR 码扫码连接，不需要 WhatsApp
+Business API。
+1 运行交互式向导
+安装 OpenClaw 后运行 openclaw onboard ，选择 WhatsApp 渠道。
+
+2
+
+3
+
+扫码配对
+终端会显示 QR 码。打开手机 WhatsApp → 设置 → 已连接设备 → 连接新设备，扫描 QR 码。
+开始使用
+配对完成后即可在 WhatsApp 中与 bot 对话。
+注意
+
+建议使用独立号码运行 WhatsApp，不要用主号。Gateway 运行时建议用 Node 而非 Bun（Bun 在 WhatsApp
+场景下不稳定）。Session 凭证要当密码管理，session 过期需要重新扫码。
+
+Slack 企业/团队场景 · 25-40 分钟
+
+Slack 适合企业和团队内部使用。需要在 Slack API 平台创建 App 并配置多项权限。默认使用 Socket Mode
+（WebSocket），不需要公网 URL。
+1 创建 Slack App
+前往 api.slack.com/apps ，点击 Create New App → From scratch，选择目标 Workspace。
+2
+
+3
+
+4
+
+启用 Socket Mode
+在 Socket Mode 页面启用，生成 App-Level Token（以 xapp- 开头），scope 选择
+connections:write 。
+配置 Bot Token Scopes
+在 OAuth & Permissions 中添加权限： chat:write 、 channels:history 、 channels:read 、
+im:write 、 im:history 、 im:read 、 users:read 、 reactions:read 、 reactions:write 、
+files:write 。
+安装并配置
+将 App 安装到 Workspace，获取 Bot User OAuth Token（以 xoxb- 开头）。将 Token 写入
+openclaw.yaml ，启动 Gateway。
+注意
+
+OpenClaw 可以在你的机器上执行真实命令，存在 prompt injection 风险。在 Slack 等多人环境中，建议不要
+在主力机器上运行 Gateway，使用 VM 或专用服务器。
+
+Signal 端到端加密 · 20-30 分钟
+
+Signal 提供端到端加密通讯。OpenClaw 通过 Signal-CLI 工具连接 Signal 网络。
+
+1
+
+2
+
+3
+
+安装 Signal-CLI
+根据操作系统安装 Signal-CLI。macOS 可通过 brew install signal-cli ，Linux 从 GitHub Releases
+下载。
+注册或关联号码
+使用 signal-cli register 注册新号码，或用 signal-cli link 关联已有 Signal 账号。
+配置 OpenClaw
+在 openclaw.yaml 中配置 Signal channel，指定号码和 Signal-CLI 路径，启动 Gateway。
+
+iMessage Apple 生态 · 30-45 分钟 · 需要 Mac
+
+iMessage 接入通过 BlueBubbles 桥接实现（替代已废弃的 imsg channel）。需要一台常开的 Mac 作为
+BlueBubbles Server。
+1 安装 BlueBubbles Server
+在 Mac 上从 bluebubbles.app/install 下载安装 BlueBubbles Server。推荐 macOS Sequoia (15) 或
+更新版本。
+2
+
+3
+
+启用 Web API
+在 BlueBubbles Server 设置中启用 Web API，设置访问密码。
+配置 OpenClaw
+在 openclaw.yaml 中配置 BlueBubbles channel：server URL、password、webhook 路径。
+extensions:
+bluebubbles:
+enabled: true
+serverUrl: "http://localhost:1234"
+password: "YOUR_PASSWORD"
+
+4
+
+配置 Webhook
+在 BlueBubbles 中添加 webhook 指向 Gateway： https://gateway-host:3000/bluebubbleswebhook?password=<password> 。webhook 必须设置密码认证。
+注意
+
+iMessage 通过 BlueBubbles 支持编辑、撤回、特效和表情回应。但 macOS 26 Tahoe 上编辑功能存在回归
+bug（issue #32275）。Mac 必须保持开机运行 BlueBubbles Server。
+
+17
+
+国内平台接入
+
+Chinese Platforms
+
+国内 IM 生态的 OpenClaw 支持正在快速发展。QQ 和飞书已有官方级支持，钉钉和企业微信社区插件
+成熟，微信个人号仍是技术挑战。
+
+QQ 国内首选 · 扫码即用
+
+QQ 是国内用户接入 OpenClaw 最简单的方式。腾讯官方开放了 QQ Bot 能力给 OpenClaw，扫码 1 分钟即可完
+成绑定。支持 Markdown、图片、语音、文件等多媒体消息，手机 QQ 和桌面 QQ 均可使用。
+1 注册 QQ Bot 开发者
+用手机 QQ 扫码完成开发者注册。未实名认证的账号需要先完成实名。单个账号最多创建 5 个 Bot。
+2
+
+3
+
+创建 QQ Bot
+在 QQ 开放平台一键创建 Bot，获取 App ID 和 Token。
+配置 OpenClaw
+在 OpenClaw 运行环境中完成配置绑定，即可在 QQ 上与 bot 对话。
+核心建议
+
+QQ Bot 适合两种场景：个人助手（私聊模式）和 QQ 社群管理（群聊自动回复、批量处理、定时通知）。
+
+飞书 国内企业首选 · OpenClaw 2026.2 起内置
+
+飞书自 OpenClaw 2026.2 起获得原生内置支持。使用 WebSocket 事件订阅，支持私聊、群聊、照片/文件/视
+频等多媒体消息。
+1 创建飞书应用
+在飞书开放平台（ open.feishu.cn ）创建企业自建应用，获取 App ID 和 App Secret。
+2
+
+3
+
+运行向导配置
+运行 openclaw onboard ，选择 Feishu channel，粘贴 App ID 和 App Secret。
+重启 Gateway
+重启 Gateway 后即可在飞书中与 bot 对话。
+
+社区替代方案：如果不想用内置插件，AlexAnys/feishu-openclaw 提供独立 bridge，不需要公网服务器、域名
+或 ngrok，5 分钟即可部署。AlexAnys/openclaw-feishu 仓库有保姆级配置指南，含 API 耗尽排查和 Lark
+Webhook 内网穿透方案。
+
+钉钉 社区插件 · Stream 模式免公网
+
+钉钉通过社区插件接入 OpenClaw。消息接收使用 Stream 模式（WebSocket 长连接），不需要公网地址。支持
+私聊、群聊、文件附件、语音消息、钉钉文档 API、多 Agent 路由等功能。
+1 创建钉钉应用
+在钉钉开放平台创建应用，添加机器人能力。
+2
+
+3
+
+设置 Stream 模式
+将消息接收模式设置为 Stream 模式。这样 bot 通过 WebSocket 长连接接收消息，不需要配置公网回调
+地址。
+安装插件并配置
+安装社区插件 @soimy/dingtalk ，或使用 DingTalk-Real-AI 官方出品的 dingtalk-openclawconnector （支持 AI Card 流式响应）。配置 openclaw.yaml 后启动 Gateway。
+核心建议
+
+钉钉尚未获得 OpenClaw 官方内置支持（2026年3月有 Feature Request 提出），但社区方案已经非常成熟。
+DingTalk-Real-AI 连接器由钉钉团队维护，可靠性有保障。
+
+企业微信 两种模式 · 已被多家云平台验证
+
+企业微信有两种接入模式：Agent 模式（XML 回调经典模式）和 Bot 模式（JSON 回调，原生 stream 支持）。
+已被腾讯云、火山引擎、天翼云等公有云平台采纳验证。
+1 创建企业微信应用
+在企业微信管理后台创建自建应用（Agent 模式）或配置智能机器人（Bot 模式）。
+2
+
+安装社区插件
+可选插件： dingxiang-me/OpenClaw-Wechat （支持个人微信互通、流式输出、群聊@、白名单控制、全
+中文配置）或 sunnoy/openclaw-plugin-wecom （支持动态 Agent 管理、指令白名单）。
+
+3
+
+配置并启动
+按插件文档配置 openclaw.yaml ，启动 Gateway。要求 OpenClaw ≥ 2026.2.9，部分功能需 ≥
+2026.3.2。
+
+微信个人号 需求最大但最复杂
+
+个人微信没有官方 Bot API，所有方案都是非官方的，封号风险始终存在。以下三种方案各有局限。
+
+方案 A：企业微信中转（推荐）
+通过企业微信接入 OpenClaw，再用微信插件打通企业微信和个人微信。合法合规，在微信生态内，需要企业
+微信管理后台权限。
+方案 B：iPad 协议 + 中转网关
+不走 Web 协议（高风险封号），走 iPad 协议。稳定性更高但技术门槛也更高。社区项目：
+freestylefly/openclaw-wechat 、 laolin5564/openclaw-wechat 。
+方案 C：微信小程序
+2026 年新方案，通过小程序对接 OpenClaw。阿里云/腾讯云有预置镜像，降低部署门槛。
+注意
+
+个人微信的所有接入方案都需要持续维护——协议更新可能导致不可用，iPad 协议相对安全但不是零风险。建
+议不要用常用的主号，使用备用号测试。云端部署才能保证 24 小时在线。
+
+openclaw-china 统一插件 一站式国内平台支持
+
+BytePioneer-AI/openclaw-china 提供一站式国内平台支持，覆盖飞书、钉钉、QQ、企业微信、微信五个平
+台。
+git clone https://github.com/BytePioneer-AI/openclaw-china.git
+cd openclaw-china
+pnpm install && pnpm build
+openclaw china setup #
+
+交互式配置向导
+
+特色功能包括：交互式配置向导减少手动配置、企业微信 MP4 视频播放器和多文件类型发送、腾讯云 ASR 语音
+转文字、钉钉日志增强（userId/groupId 定位问题）。
+选择建议：如果只用一个国内平台，直接安装对应的独立插件更轻量。如果要同时接入多个国内平台，
+openclaw-china 统一包更省事。
+
+远程访问
+
