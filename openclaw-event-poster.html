@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw免费安装活动 | 2026年3月14日</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0a2a 0%, #1a1a3a 50%, #0a0a2a 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+            z-index: -1;
+        }
+        
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        .poster-container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(10, 10, 42, 0.9);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 
+                0 0 100px rgba(0, 255, 255, 0.3),
+                0 0 200px rgba(255, 0, 255, 0.2),
+                0 20px 60px rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .poster-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, 
+                rgba(0, 255, 255, 0.8), 
+                rgba(255, 0, 255, 0.8), 
+                rgba(0, 255, 255, 0.8));
+            border-radius: 32px;
+            z-index: -1;
+            animation: borderGlow 4s infinite linear;
+        }
+        
+        @keyframes borderGlow {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #00ffff 0%, #ff00ff 100%);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0,0 L100,0 L100,100 L0,100 Z" fill="none" stroke="white" stroke-width="0.5" stroke-dasharray="5,5"/></svg>');
+            opacity: 0.1;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 4.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff, #00ffff, #ff00ff, #fff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            animation: logoGlow 3s infinite alternate;
+        }
+        
+        @keyframes logoGlow {
+            0% { text-shadow: 0 0 30px rgba(0, 255, 255, 0.5); }
+            100% { text-shadow: 0 0 50px rgba(255, 0, 255, 0.7); }
+        }
+        
+        .subtitle {
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .event-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin: 30px 0;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .event-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00ffff, #ff00ff, transparent);
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 60px;
+        }
+        
+        .info-section {
+            background: rgba(20, 20, 60, 0.7);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .info-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 255, 0.2);
+        }
+        
+        .section-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #00ffff;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .section-title i {
+            font-size: 2rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .info-icon {
+            font-size: 1.5rem;
+            color: #ff00ff;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .info-content h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+        
+        .info-content p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+        
+        .highlight {
+            color: #00ffff;
+            font-weight: 600;
+        }
+        
+        .warning {
+            color: #ff5555;
+            font-weight: 600;
+        }
+        
+        .requirements {
+            background: rgba(255, 0, 255, 0.1);
+            border-left: 4px solid #ff00ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .cta-section {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(90deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1));
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+        
+        .cta-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 20px 50px;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            color: #0a0a2a;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 50px rgba(255, 0, 255, 0.7);
+        }
+        
+        .cta-button:hover::before {
+            left: 100%;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
+        }
+        
+        .footer p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            border-radius: 20px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .qr-code::before {
+            content: 'QR Code';
+            color: #0a0a2a;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+                padding: 30px;
+                gap: 30px;
+            }
+            
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .event-title {
+                font-size: 2.5rem;
+            }
+            
+            .cta-title {
+                font-size: 2rem;
+            }
+            
+            .cta-button {
+                padding: 15px 30px;
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .event-title {
+                font-size: 2rem;
+            }
+            
+            .info-section {
+                padding: 20px;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="poster-container">
+        <div class="header">
+            <div class="logo">OpenClaw</div>
+            <div class="subtitle">AI智能助手俱乐部</div>
+            <h1 class="event-title">免费安装活动</h1>
+        </div>
+        
+        <div class="content">
+            <div class="info-section">
+                <h2 class="section-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    活动详情
+                </h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>活动时间</h3>
+                            <p><span class="highlight">2026年3月14日（周六）</span><br>下午 14:00 - 17:00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>活动地点</h3>
+                            <p><span class="highlight">高金教学楼1楼102教室</span><br>上海市浦东新区世纪大道</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>参与人数</h3>
+                            <p><span class="highlight">限30人</span>（先到先得）<br>适合AI爱好者、开发者、学生</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h2 class="section-title">
+                    <i class="fas fa-graduation-cap"></i>
+                    你将学到
+                </h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>OpenClaw安装配置</h3>
+                            <p>从零开始安装OpenClaw AI助手<br>环境配置与系统优化</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>API密钥配置</h3>
+                            <p>DeepSeek API密钥获取与配置<br>多模型接入与切换策略</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>实战应用</h3>
+                            <p>AI工作助手配置与使用<br>自动化工作流搭建</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h2 class="section-title">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    重要提醒
+                </h2>
+                <div class="requirements">
+                    <h3><span class="warning">⚠️ 必须提前准备：</span></h3>
+                    <p>1. 笔记本电脑（Windows/Mac/Linux均可）</p>
+                    <p>2. <span class="highlight">DeepSeek API密钥</span>（活动前注册获取）</p>
+                    <p>3. 稳定的网络连接</p>
+                    <p>4. Node.js v18+ 环境（现场协助安装）</p>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i>
+                    活动亮点
+                </h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>完全免费</h3>
+                            <p>零费用参与，现场提供技术指导<br>所有软件工具免费使用</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>专家指导</h3>
+                            <p>资深OpenClaw开发者现场教学<br>一对一问题解答</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>社区交流</h3>
+                            <p>加入OpenClaw开发者社区<br>获取持续技术支持</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <h2 class="cta-title">立即报名参加！</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 30px; color: rgba(255, 255, 255, 0.9);">
+                    名额有限，仅限30人！扫描二维码或点击按钮报名
+                </p>
+                
+                <a href="#" class="cta-button" onclick="alert('报名链接即将开放，请关注俱乐部通知！')">
+                    <i class="fas fa-rocket" style="margin-right: 10px;"></i>
+                    立即报名
+                </a>
+                
+                <div class="qr-code" style="margin-top: 40px;"></div>
+                <p style="margin-top: 10px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7);">
+                    扫描二维码加入活动群
+                </p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>主办：OpenClaw AI智能助手俱乐部</p>
+            <p>技术支持：DeepSeek AI & OpenClaw社区</p>
+            <p>© 2026 OpenClaw Club. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script>
+        // 创建星空背景
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // 随机大小
+                const size = Math.random() * 3 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                
+                // 随机位置
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // 随机动画延迟
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // 添加鼠标跟随效果
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            document.querySelector('.poster-container').style.transform = 
+                `perspective(1000px) rotateY(${x * 2 - 1}deg) rotateX(${1 - y * 2}deg)`;
+        });
+        
+        // 鼠标离开时恢复
+        document.querySelector('.poster-container').addEventListener('mouseleave', () => {
+            document.querySelector('.poster-container').style.transform = 
+                'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+        });
+        
+        // 页面加载时创建星空
+        window.addEventListener('load', () => {
+            createStars();
+            
+            // 添加加载动画
+            const poster = document.querySelector('.poster-container');
+            poster.style.opacity = '0';
+            poster.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                poster.style.transition = 'all 0.8s ease';
+                poster.style.opacity = '1';
+                poster.style.transform = 'scale(1)';
+            }, 100);
+        });
+        
+        // 添加点击特效
+        document.querySelectorAll('.info-section, .cta-button').forEach(element => {
+            element.addEventListener('click', function(e) {
+                if (this.classList.contains('cta-button')) return;
+                
+                const x = e.clientX - this.getBoundingClientRect().left;
+                const y = e.clientY - this.getBoundingClientRect().top;
+                
+                const ripple = document.createElement('span');
+                ripple.style.position = 'absolute';
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                ripple.style.width = '0';
+                ripple.style.height = '0';
+                ripple.style.borderRadius = '50%';
+                ripple.style.background = 'radial-gradient(circle, rgba(0,255,255,0.3) 0%, transparent 70%)';
+                ripple.style.transform = 'translate(-50%, -50%)';
+                ripple.style.animation = 'ripple 0.6s linear';
+                
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+        
+        // 添加键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                document.querySelector('.cta-button').click();
+            }
+        });
+        
+        // 添加CSS动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    width: 300px;
+                    height: 300px;
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
