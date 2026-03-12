@@ -1,0 +1,14 @@
+{
+  "api_key": "sk-wGqBV0I...oUPyWRR5BN",
+  "base_url": "https://yunwu.ai",
+  "model_id": "flux-pro",
+  "endpoint": "/v1/images/generations",
+  "tested_at": "2026-03-12T15:53:46.269466",
+  "available_models": [
+    "fal-ai/flux-1/dev/redux",
+    "black-forest-labs/flux-1.1-pro-ultra",
+    "fal-ai/flux-1/dev/image-to-image",
+    "flux-kontext-apps/multi-image-kontext-max",
+    "fal-ai/flux-pro/kontext/max"
+  ]
+}

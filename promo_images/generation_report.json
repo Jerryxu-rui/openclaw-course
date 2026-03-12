@@ -1,0 +1,75 @@
+{
+  "generation_time": "2026-03-12T16:02:30.669685",
+  "total_images": 5,
+  "successful_images": 5,
+  "failed_images": 0,
+  "success_rate": "100.0%",
+  "output_directory": "/home/jerryxu/.openclaw/workspace/promo_images",
+  "api_config": {
+    "model": "flux-pro",
+    "endpoint": "/v1/images/generations",
+    "base_url": "https://yunwu.ai"
+  },
+  "images": [
+    {
+      "name": "openclaw_course_cover_1200x630",
+      "description": "课程封面图 (优先级1)",
+      "dimensions": "1200x630",
+      "status": "success",
+      "error": "",
+      "filename": "openclaw_course_cover_1200x630.png",
+      "filepath": "promo_images/openclaw_course_cover_1200x630.png",
+      "url": "https://s3.ffire.cc/cdn/20260312/ACHfLTe4Up96jpFtgBMmuL",
+      "size": 983108,
+      "timestamp": "2026-03-12T16:01:28.669432"
+    },
+    {
+      "name": "openclaw_finance_scene_1200x800",
+      "description": "金融实战场景图 (优先级2)",
+      "dimensions": "1200x800",
+      "status": "success",
+      "error": "",
+      "filename": "openclaw_finance_scene_1200x800.png",
+      "filepath": "promo_images/openclaw_finance_scene_1200x800.png",
+      "url": "https://s3.ffire.cc/cdn/20260312/xY54EvQEkAu5vaXWcxuc2e",
+      "size": 1124568,
+      "timestamp": "2026-03-12T16:01:43.742723"
+    },
+    {
+      "name": "openclaw_tech_architecture_1920x1080",
+      "description": "技术架构图 (优先级3)",
+      "dimensions": "1920x1080",
+      "status": "success",
+      "error": "",
+      "filename": "openclaw_tech_architecture_1920x1080.png",
+      "filepath": "promo_images/openclaw_tech_architecture_1920x1080.png",
+      "url": "https://s3.ffire.cc/cdn/20260312/dunfkAjf5iYUWVQncKPyoL",
+      "size": 934463,
+      "timestamp": "2026-03-12T16:02:01.237446"
+    },
+    {
+      "name": "openclaw_stock_analysis_1200x800",
+      "description": "股票分析场景图 (优先级4)",
+      "dimensions": "1200x800",
+      "status": "success",
+      "error": "",
+      "filename": "openclaw_stock_analysis_1200x800.png",
+      "filepath": "promo_images/openclaw_stock_analysis_1200x800.png",
+      "url": "https://s3.ffire.cc/cdn/20260312/ANQSJwWMAYqFyvefxzHFPY",
+      "size": 1021391,
+      "timestamp": "2026-03-12T16:02:17.071933"
+    },
+    {
+      "name": "openclaw_learning_results_1200x600",
+      "description": "学习成果对比图 (优先级5)",
+      "dimensions": "1200x600",
+      "status": "success",
+      "error": "",
+      "filename": "openclaw_learning_results_1200x600.png",
+      "filepath": "promo_images/openclaw_learning_results_1200x600.png",
+      "url": "https://s3.ffire.cc/cdn/20260312/jYtF5ijkg87hzGfZGWre3o",
+      "size": 710349,
+      "timestamp": "2026-03-12T16:02:30.668506"
+    }
+  ]
+}

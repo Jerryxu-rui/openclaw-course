@@ -49,5 +49,7 @@ build/
 *.mov
 *.jpg
 *.jpeg
-*.png
 *.gif
+
+# Allow promotional images (needed for course materials)
+# !promo_images/*.png
