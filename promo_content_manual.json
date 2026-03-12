@@ -1,0 +1,57 @@
+{
+  "promo_content": {
+    "slogans": [
+      "🚀 从零到一，打造你的专属AI助手生态",
+      "💼 AI+金融实战：智能体金融与股票分析双剑合璧",
+      "⚡ 生产级OpenClaw部署，不只是玩具，是真能用的系统",
+      "💰 成本优化专家：教你用最少的钱获得最好的AI效果",
+      "🎯 国内首个系统性OpenClaw课程，实战经验全分享"
+    ],
+    "social_media": {
+      "weibo": "🔥 重磅！OpenClaw完整课程体系正式发布！\n\n15课系统教学，从零基础到高级应用，打造你的专属AI助手生态。\n\n🌟 课程亮点：\n✅ 国内首个系统性OpenClaw课程\n✅ 实战导向，生产级部署方案\n✅ 金融实战案例：智能体金融+智能股票分析\n✅ 成本优化专家，节省90%+ API费用\n\n🎯 适合人群：\n• 开发者、产品经理、AI从业者\n• 投资者、量化交易爱好者\n• 想提升工作效率的职场人士\n\n📚 立即学习，掌握AI时代的生存技能！\n#OpenClaw #AI助手 #金融科技 #量化交易",
+      "wechat": "【OpenClaw完整课程体系】正式上线！\n\n从零到一，打造你的专属AI助手生态。\n\n📖 15课系统教学，涵盖：\n• 基础入门：安装配置、核心功能\n• 进阶应用：模型选择、记忆系统、深度搜索\n• 高级进阶：多Agent协作、企业级部署\n• 实战项目：金融案例1+2、知识管理系统\n\n💡 课程特色：\n1. 实战导向：每课都有完整实战演示\n2. 成本优化：教你如何降低90%+ API成本\n3. 生产级实践：可直接上生产的方案\n4. 金融实战：智能体金融+股票分析双案例\n\n🎁 限时优惠：早鸟价¥699（原价¥899）\n\n立即报名，开启你的AI助手之旅！"
+    },
+    "highlights": [
+      "国内首个系统性OpenClaw课程，填补市场空白",
+      "基于高强度使用经验的实战总结，不是纸上谈兵",
+      "深度成本优化方案，教你用最少的钱获得最好的效果",
+      "生产级部署方案，不是玩具Demo，是真能用的系统",
+      "金融实战双案例：智能体金融+智能股票分析，直击商业价值"
+    ],
+    "target_audience": {
+      "developers": "开发者：掌握AI Agent开发，提升10倍工作效率",
+      "product_managers": "产品经理：用AI自动化工作流，解放双手",
+      "investors": "投资者：学习AI金融实战，打造智能投资系统",
+      "ai_enthusiasts": "AI从业者：深入OpenClaw生态，掌握前沿技术"
+    }
+  },
+  "image_prompts": {
+    "cover": {
+      "english": "A modern, sleek cover design for an AI assistant course. The title 'OpenClaw Complete Course System' is prominently displayed with a tagline 'From Zero to One, Build Your AI Assistant Ecosystem'. The background features abstract circuit patterns blending with financial charts, representing the fusion of AI and finance. Color scheme: blue and purple gradients with gold accents. Style: professional, tech-focused, clean layout.",
+      "chinese": "课程封面图：现代简洁的设计，标题'OpenClaw完整课程体系'突出显示，副标题'从零到一，打造你的专属AI助手生态'。背景是抽象的电路图案与金融图表融合，代表AI与金融的结合。色彩：蓝紫色渐变，金色点缀。风格：专业、科技感、简洁布局。",
+      "style": "现代科技风，简洁专业，蓝紫色主色调，金色点缀"
+    },
+    "architecture": {
+      "english": "An infographic showing the OpenClaw technology stack and architecture. The diagram includes layers: User Interface (Feishu, Telegram, Web), Gateway Layer, Agent System, Model Layer (Claude, GPT, Gemini, DeepSeek), Skills Ecosystem, and Memory System. Arrows show data flow between components. Style: clean technical diagram with icons for each component, monochromatic blue color scheme with highlights.",
+      "chinese": "技术架构图：展示OpenClaw技术栈和架构的信息图。包括层次：用户界面层（飞书、Telegram、Web）、Gateway层、Agent系统、模型层（Claude、GPT、Gemini、DeepSeek）、Skills生态系统、记忆系统。箭头显示组件间的数据流。风格：简洁的技术图表，每个组件有图标，单色蓝色调加高亮。",
+      "style": "技术图表风格，简洁清晰，蓝色调，有图标和箭头"
+    },
+    "finance_trading": {
+      "english": "A futuristic trading interface for agentic finance. Multiple screens show Polymarket prediction markets, real-time trading signals, risk metrics, and profit/loss charts. AI agents are visualized as glowing orbs analyzing data streams. The scene has a dark theme with neon blue and green highlights, representing the high-tech nature of algorithmic trading.",
+      "chinese": "金融实战场景：未来感的智能体金融交易界面。多个屏幕显示Polymarket预测市场、实时交易信号、风险指标、盈亏图表。AI智能体被可视化为发光的球体分析数据流。场景采用暗色主题，霓虹蓝绿色高亮，代表算法交易的高科技特性。",
+      "style": "未来科技感，暗色主题，霓虹蓝绿色，多屏幕显示"
+    },
+    "stock_analysis": {
+      "english": "A smart stock analysis dashboard. The interface displays real-time stock charts with technical indicators (moving averages, RSI, MACD), fundamental data tables, risk assessment metrics, and automated report generation. AI is analyzing patterns and generating buy/sell signals. Style: professional financial software interface, clean white background with data visualizations in corporate blue and green.",
+      "chinese": "股票分析场景：智能股票分析仪表盘。界面显示实时股票图表与技术指标（移动平均线、RSI、MACD）、基本面数据表格、风险评估指标、自动化报告生成。AI正在分析模式并生成买卖信号。风格：专业金融软件界面，简洁白色背景，企业蓝绿色数据可视化。",
+      "style": "专业金融软件风格，白色背景，蓝绿色图表，数据密集"
+    },
+    "learning_outcomes": {
+      "english": "A before-and-after comparison showing skill transformation. Left side: a person overwhelmed with manual tasks (emails, reports, data analysis). Right side: the same person efficiently managing everything through AI assistants, with dashboards showing productivity metrics improved by 300%. Style: inspirational, positive, showing tangible results, warm color palette with gold accents for achievement.",
+      "chinese": "学习成果图：展示技能转变的前后对比。左侧：一个人被手动任务淹没（邮件、报告、数据分析）。右侧：同一个人通过AI助手高效管理一切，仪表盘显示生产力指标提升300%。风格：鼓舞人心，积极向上，展示具体成果，温暖色调加金色成就点缀。",
+      "style": "鼓舞人心风格，前后对比，温暖色调，展示具体成果"
+    }
+  },
+  "generated_at": "2026-03-12",
+  "notes": "手动创建的宣传内容，适用于课程推广"
+}
