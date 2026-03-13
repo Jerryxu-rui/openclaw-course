@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw完整课程体系 - 高级宣传演示</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap');
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+            --dark-bg: linear-gradient(135deg, #050508 0%, #0a0a1a 50%, #0d1528 100%);
+            --light-text: #FFFFFF;
+            --medium-text: #CBD5E0;
+            --accent-color: #667EEA;
+            --accent-gold: #FFD700;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--dark-bg);
+            color: var(--light-text);
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+        
+        /* 加载屏幕 */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--dark-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loading-logo {
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .loading-progress {
+            width: 0%;
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        /* 主容器 */
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: none;
+        }
+        
+        /* 幻灯片 */
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(100px) scale(0.95);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1;
+        }
+        
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            z-index: 2;
+        }
+        
+        .slide.prev {
+            transform: translateX(-100px) scale(0.95);
+            opacity: 0;
+        }
+        
+        /* 幻灯片内容 */
+        .slide-content {
+            max-width: 1200px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide-header {
+            margin-bottom: 60px;
+        }
+        
+        .slide-title {
+            font-size: 4.5rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .slide-subtitle {
+            font-size: 2rem;
+            font-weight: 400;
+            color: var(--medium-text);
+            line-height: 1.4;
+        }
+        
+        .slide-body {
+            font-size: 1.6rem;
+            line-height: 1.8;
+            color: var(--medium-text);
+        }
+        
+        /* 列表样式 */
+        .feature-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .feature-item {
+            margin-bottom: 25px;
+            padding-left: 40px;
+            position: relative;
+            font-size: 1.5rem;
+        }
+        
+        .feature-item:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-gold);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        /* 卡片网格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+        
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--light-text);
+        }
+        
+        .card-content {
+            font-size: 1.2rem;
+            color: var(--medium-text);
+            line-height: 1.6;
+        }
+        
+        /* 按钮 */
+        .cta-button {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 20px 60px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+        
+        .cta-button:active {
+            transform: translateY(0);
+        }
+        
+        /* 导航控制 */
+        .nav-controls {
+            position: fixed;
+            bottom: 40px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            gap: 30px;
+        }
+        
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 28px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-btn:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: scale(1.1);
+        }
+        
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .progress-bar {
+            width: 200px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            width: 10%;
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            color: var(--medium-text);
+            font-size: 1.1rem;
+            font-weight: 500;
+            min-width: 80px;
+        }
+        
+        /* 粒子背景 */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+            opacity: 0.6;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .slide {
+                padding: 60px;
+            }
+            
+            .slide-title {
+                font-size: 3.5rem;
+            }
+            
+            .slide-subtitle {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .slide {
+                padding: 40px 20px;
+            }
+            
+            .slide-title {
+                font-size: 2.8rem;
+            }
+            
+            .slide-subtitle {
+                font-size: 1.5rem;
+            }
+            
+            .slide-body {
+                font-size: 1.3rem;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-controls {
+                bottom: 20px;
+            }
+            
+            .nav-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            
+            .progress-bar {
+                width: 150px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .slide {
+                padding: 30px 15px;
+            }
+            
+            .slide-title {
+                font-size: 2.2rem;
+            }
+            
+            .slide-subtitle {
+                font-size: 1.3rem;
+            }
+            
+            .feature-item {
+                font-size: 1.2rem;
+            }
+            
+            .nav-controls {
+                bottom: 15px;
+                gap: 20px;
+            }
+            
+            .progress-bar {
+                width: 120px;
+            }
+        }
+        
+        /* 打印样式 */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .loading-screen,
+            .nav-controls,
+            .particles-container {
+                display: none !important;
+            }
+            
+            .presentation-container {
+                display: block !important;
+            }
+            
+            .slide {
+                display: block !important;
+                opacity: 1 !important;
+                transform: none !important;
+                position: relative !important;
+                page-break-after: always;
+                background: white !important;
+                color: black !important;
+                padding: 50px !important;
+            }
+            
+            .slide-title {
+                background: none !important;
+                -webkit-text-fill-color: black !important;
+                color: black !important;
+            }
+            
+            .slide-subtitle,
+            .slide-body {
+                color: #333 !important;
+            }
+            
+            .card {
+                background: #f5f5f5 !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载屏幕 -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">OpenClaw</div>
+        <div class="loading-text" id="loadingText">正在加载高级宣传演示文稿...</div>
+        <div class="loading-bar">
+            <div class="loading-progress" id="loadingProgress"></div>
+        </div>
+    </div>
+    
+    <!-- 主演示容器 -->
+    <div class="presentation-container" id="presentationContainer">
+        <!-- 幻灯片将通过JavaScript动态生成 -->
+    </div>
+    
+    <!-- 导航控制 -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" title="上一页 (←)">←</button>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">1 / 12</div>
+        </div>
+        <button class="nav-btn" id="nextBtn" title="下一页 (→)">→</button>
+    </div>
+    
+    <!-- 粒子背景 -->
+    <div class="particles-container" id="particlesContainer"></div>
+    
+    <script>
+        // 完整的幻灯片数据
+        const slides = [
+            {
+                id: 1,
+                type: 'cover',
+                title: 'OpenClaw完整课程体系',
+                subtitle: '从零到一，打造你的专属AI助手生态',
+                content: '国内首个系统性OpenClaw课程，实战经验全分享',
+                features: []
+            },
+            {
+                id: 2,
+                type: 'problem',
+                title: '为什么需要这个课程？',
+                subtitle: '解决OpenClaw学习中的核心痛点',
+                content: '',
+                features: [
+                    '安装配置复杂，缺乏系统指导',
+                    '成本控制困难，API费用高昂',
+                    '实战案例缺乏，难以应用于实际',
+                    '生产部署困难，停留在玩具Demo'
+                ]
+            },
+            {
+                id: 3,
+                type: 'solution',
+                title: '我们的解决方案',
+                subtitle: '四大核心价值，直击痛点',
+                content: '',
+                features: [
+                    '系统性教学：15课完整体系，从基础到高级',
+                    '实战导向：基于高强度使用经验的实战总结',
+                    '成本优化：教你如何节省90%+的API费用',
+                    '生产级部署：企业级方案，不是玩具Demo'
+                ]
+            },
+            {
+                id: 4,
+                type: 'features',
+                title: '课程核心亮点',
+                subtitle: '四大特色，与众不同',
+                content: '',
+                features: [
+                    '国内首个系统性OpenClaw课程',
+                    '金融实战双案例：智能体金融+股票分析',
+                    '成本优化专家，节省90%+ API费用',
+                    '生产级部署方案，支持团队协作'
+                ]
+            },
+            {
+                id: 5,
+                type: 'outline',
+                title: '课程大纲',
+                subtitle: '15课系统教学，4个阶段',
+                content: '完整的课程体系设计，确保学习效果',
+                features: [
+                    '第一阶段：基础入门（4课）- 安装配置、核心功能',
+                    '第二阶段：进阶应用（5课）- 模型选择、记忆系统',
+                    '第三阶段：高级进阶（3课）- 多Agent协作、企业部署',
+                    '第四阶段：实战项目（2课）- 金融案例、知识管理'
+                ]
+            },
+            {
+                id: 6,
+                type: 'finance',
+                title: '金融实战双案例',
+                subtitle: 'AI+金融的完美结合',
+                content: '将AI技术应用于实际金融场景',
+                features: [
+                    '案例1：智能体金融 - Polymarket预测市场交易',
+                    '案例2：智能股票分析 - A股/港股/美股投资分析',
+                    '技术面+基本面结合，打造专业分析系统',
+                    '高频交易策略和风险管理'
+                ]
+            },
+            {
+                id: 7,
+                type: 'audience',
+                title: '目标学员',
+                subtitle: '适合谁学习？',
+                content: '广泛的适用人群，满足不同需求',
+                features: [
+                    '开发者：想掌握AI Agent开发技术',
+                    '产品经理：想用AI自动化工作流程',
+                    '投资者：想学习AI在金融领域的应用',
+                    'AI从业者：想深入OpenClaw生态'
+                ]
+            },
+            {
+                id: 8,
+                type: 'outcomes',
+                title: '学习成果',
+                subtitle: '学完后你能做什么？',
+                content: '掌握核心技能，应用于实际工作',
+                features: [
+                    '从零开始部署和配置OpenClaw',
+                    '构建自动化工作流，提升10倍工作效率',
+                    '开发金融分析系统，应用于实际投资',
+                    '掌握成本优化技巧，节省90%+ AI使用成本',
+                    '部署生产级OpenClaw实例，支持团队协作'
+                ]
+            },
+            {
+                id: 9,
+                type: 'curriculum',
+                title: '详细课程内容',
+                subtitle: '15课完整教学',
+                content: '每课都有完整的实战演示',
+                features: [
+                    '第1-4课：基础入门 - 安装、配置、核心功能',
+                    '第5-9课：进阶应用 - 模型、记忆、搜索、自动化',
+                    '第10-12课：高级进阶 - Gateway、多Agent、自定义Skill',
+                    '第13-15课：实战项目 - 知识管理、金融案例1+2'
+                ]
+            },
+            {
+                id: 10,
+                type: 'pricing',
+                title: '定价策略',
+                subtitle: '限时优惠，立即行动',
+                content: '合理的价格，超值的回报',
+                features: [
+                    '完整课程包：¥899（原价¥999）',
+                    '早鸟价：¥699（节省¥200，限前100名）',
+                    '团购价：3人以上¥599/人（节省¥400）',
+                    '企业定制：¥1999/人（含定制化服务）'
+                ]
+            },
+            {
+                id: 11,
+                type: 'bonus',
+                title: '额外福利',
+                subtitle: '报名即享多重福利',
+                content: '超值附加价值',
+                features: [
+                    '终身访问：课程内容永久更新',
+                    '学员社区：专属交流群和技术支持',
+                    '实战源码：所有案例的完整代码',
+                    '一对一答疑：30分钟专属咨询'
+                ]
+            },
+            {
+                id: 12,
+                type: 'cta',
+                title: '立即报名',
+                subtitle: '开启你的AI助手之旅',
+                content: '扫描二维码或点击链接立即报名',
+                features: []
+            }
+        ];
+        
+        // 全局变量
+        let currentSlideIndex = 0;
+        let isLoading = true;
+        
+        // 初始化演示文稿
+        function initPresentation() {
+            // 模拟加载进度
+            simulateLoading();
+            
+            // 创建粒子背景
+            createParticles();
+            
+            // 创建幻灯片
+            createSlides();
+            
+            // 设置事件监听器
+            setupEventListeners();
+            
+            // 显示第一张幻灯片
+            setTimeout(() => {
+                showSlide(0);
+                isLoading = false;
+            }, 1500);
+        }
+        
+        // 模拟加载进度
+        function simulateLoading() {
+            const progressBar = document.getElementById('loadingProgress');
+            const loadingText = document.getElementById('loadingText');
+            const texts = [
+                '正在加载高级宣传演示文稿...',
+                '初始化粒子系统...',
+                '创建幻灯片内容...',
+                '准备交互功能...',
+                '即将完成...'
+            ];
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = `${progress}%`;
+                
+                // 更新加载文本
+                const textIndex = Math.floor(progress / 20);
+                if (textIndex < texts.length) {
+                    loadingText.textContent = texts[textIndex];
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // 隐藏加载屏幕
+                    setTimeout(() => {
+                        const loadingScreen = document.getElementById('loadingScreen');
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                            document.getElementById('presentationContainer').style.display = 'block';
+                        }, 500);
+                    }, 300);
+                }
+            }, 50);
+        }
+        
+        // 创建粒子背景
+        function createParticles() {
+            const container = document.getElementById('particlesContainer');
+            const particleCount = 80;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // 随机位置
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // 随机大小
+                const size = 2 + Math.random() * 6;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // 随机动画
+                const duration = 15 + Math.random() * 20;
+                const delay = Math.random() * 20;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                // 随机颜色
+                const hue = 220 + Math.random() * 60;
+                particle.style.background = `hsla(${hue}, 80%, 65%, ${0.3 + Math.random() * 0.4})`;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        // 创建幻灯片
+        function createSlides() {
+            const container = document.getElementById('presentationContainer');
+            
+            slides.forEach((slide, index) => {
+                const slideElement = document.createElement('div');
+                slideElement.className = 'slide';
+                slideElement.id = `slide-${index}`;
+                slideElement.dataset.index = index;
+                
+                let slideContent = '';
+                
+                switch(slide.type) {
+                    case 'cover':
+                        slideContent = `
+                            <div class="slide-content">
+                                <div class="slide-header">
+                                    <h1 class="slide-title">${slide.title}</h1>
+                                    <h2 class="slide-subtitle">${slide.subtitle}</h2>
+                                </div>
+                                <div class="slide-body">
+                                    <p>${slide.content}</p>
+                                    <button class="cta-button" onclick="scrollToSlide(11)">立即了解详情</button>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                        
+                    case 'cta':
+                        slideContent = `
+                            <div class="slide-content">
+                                <div class="slide-header">
+                                    <h1 class="slide-title">${slide.title}</h1>
+                                    <h2 class="slide-subtitle">${slide.subtitle}</h2>
+                                </div>
+                                <div class="slide-body">
+                                    <p>${slide.content}</p>
+                                    <div style="text-align: center; margin-top: 40px;">
+                                        <button class="cta-button" onclick="alert('报名功能即将上线！')">立即报名</button>
+                                        <p style="margin-top: 20px; font-size: 1.2rem; color: var(--medium-text);">
+                                            或访问：github.com/Jerryxu-rui/openclaw-course
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        break;
+                        
+                    default:
+                        slideContent = `
+                            <div class="slide-content">
+                                <div class="slide-header">
+                                    <h1 class="slide-title">${slide.title}</h1>
+                                    <h2 class="slide-subtitle">${slide.subtitle}</h2>
+                                </div>
+                                <div class="slide-body">
+                                    ${slide.content ? `<p style="margin-bottom: 30px;">${slide.content}</p>` : ''}
+                                    ${slide.features.length > 0 ? `
+                                        <ul class="feature-list">
+                                            ${slide.features.map(feature => `<li class="feature-item">${feature}</li>`).join('')}
+                                        </ul>
+                                    ` : ''}
+                                    
+                                    ${slide.type === 'outline' || slide.type === 'curriculum' ? `
+                                        <div class="card-grid" style="margin-top: 40px;">
+                                            <div class="card">
+                                                <h3 class="card-title">基础阶段</h3>
+                                                <p class="card-content">4课，掌握OpenClaw核心概念和基础操作</p>
+                                            </div>
+                                            <div class="card">
+                                                <h3 class="card-title">进阶阶段</h3>
+                                                <p class="card-content">5课，深入学习高级功能和优化技巧</p>
+                                            </div>
+                                            <div class="card">
+                                                <h3 class="card-title">高级阶段</h3>
+                                                <p class="card-content">3课，掌握企业级部署和团队协作</p>
+                                            </div>
+                                            <div class="card">
+                                                <h3 class="card-title">实战阶段</h3>
+                                                <p class="card-content">2课，完成金融实战项目开发</p>
+                                            </div>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                }
+                
+                slideElement.innerHTML = slideContent;
+                container.appendChild(slideElement);
+            });
+        }
+        
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 导航按钮
+            document.getElementById('prevBtn').addEventListener('click', prevSlide);
+            document.getElementById('nextBtn').addEventListener('click', nextSlide);
+            
+            // 键盘导航
+            document.addEventListener('keydown', (e) => {
+                if (isLoading) return;
+                
+                switch(e.key) {
+                    case 'ArrowLeft':
+                    case 'PageUp':
+                        prevSlide();
+                        break;
+                    case 'ArrowRight':
+                    case 'PageDown':
+                    case ' ':
+                        nextSlide();
+                        break;
+                    case 'Home':
+                        showSlide(0);
+                        break;
+                    case 'End':
+                        showSlide(slides.length - 1);
+                        break;
+                    case 'f':
+                    case 'F':
+                        if (e.ctrlKey) toggleFullscreen();
+                        break;
+                    case 'Escape':
+                        exitFullscreen();
+                        break;
+                    case 'p':
+                    case 'P':
+                        if (e.ctrlKey) window.print();
+                        break;
+                }
+            });
+            
+            // 触摸滑动
+            let touchStartX = 0;
+            let touchStartY = 0;
+            
+            document.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            });
+            
+            document.addEventListener('touchend', (e) => {
+                const touchEndX = e.changedTouches[0].clientX;
+                const touchEndY = e.changedTouches[0].clientY;
+                
+                const diffX = touchStartX - touchEndX;
+                const diffY = touchStartY - touchEndY;
+                
+                // 只处理水平滑动，且垂直滑动距离较小
+                if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+                    if (diffX > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                }
+            });
+            
+            // 鼠标滚轮
+            let wheelTimeout;
+            document.addEventListener('wheel', (e) => {
+                if (isLoading) return;
+                
+                clearTimeout(wheelTimeout);
+                wheelTimeout = setTimeout(() => {
+                    if (e.deltaY > 0) {
+                        nextSlide();
+                    } else if (e.deltaY < 0) {
+                        prevSlide();
+                    }
+                }, 100);
+            }, { passive: true });
+        }
+        
+        // 显示指定幻灯片
+        function showSlide(index) {
+            if (index < 0 || index >= slides.length || isLoading) return;
+            
+            // 隐藏当前幻灯片
+            const currentSlide = document.querySelector('.slide.active');
+            if (currentSlide) {
+                currentSlide.classList.remove('active');
+                currentSlide.classList.add('prev');
+                
+                // 移除prev类，为下一次动画做准备
+                setTimeout(() => {
+                    currentSlide.classList.remove('prev');
+                }, 800);
+            }
+            
+            // 显示新幻灯片
+            const newSlide = document.getElementById(`slide-${index}`);
+            if (newSlide) {
+                newSlide.classList.add('active');
+                currentSlideIndex = index;
+                
+                // 更新进度指示器
+                updateProgress();
+                
+                // 更新URL哈希
+                window.location.hash = `slide-${index + 1}`;
+            }
+        }
+        
+        // 滚动到指定幻灯片（用于封面按钮）
+        function scrollToSlide(index) {
+            showSlide(index);
+        }
+        
+        // 下一张幻灯片
+        function nextSlide() {
+            if (currentSlideIndex < slides.length - 1) {
+                showSlide(currentSlideIndex + 1);
+            }
+        }
+        
+        // 上一张幻灯片
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                showSlide(currentSlideIndex - 1);
+            }
+        }
+        
+        // 更新进度指示器
+        function updateProgress() {
+            const progress = ((currentSlideIndex + 1) / slides.length) * 100;
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            if (progressFill) {
+                progressFill.style.width = `${progress}%`;
+            }
+            
+            if (progressText) {
+                progressText.textContent = `${currentSlideIndex + 1} / ${slides.length}`;
+            }
+        }
+        
+        // 全屏控制
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`全屏请求失败: ${err.message}`);
+                });
+            } else {
+                exitFullscreen();
+            }
+        }
+        
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+        
+        // 处理URL哈希
+        function handleHashChange() {
+            const hash = window.location.hash;
+            if (hash) {
+                const match = hash.match(/slide-(\d+)/);
+                if (match) {
+                    const slideNum = parseInt(match[1]) - 1;
+                    if (slideNum >= 0 && slideNum < slides.length) {
+                        showSlide(slideNum);
+                    }
+                }
+            }
+        }
+        
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', initPresentation);
+        window.addEventListener('hashchange', handleHashChange);
+        
+        // 初始处理哈希
+        setTimeout(handleHashChange, 100);
+    </script>
+</body>
+</html>

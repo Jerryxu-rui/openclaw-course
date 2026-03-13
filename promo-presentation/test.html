@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenClaw宣传演示文稿测试</title>
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #050508 0%, #0a0a1a 50%, #0d1528 100%);
+            color: white;
+            margin: 0;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #CBD5E0;
+            margin-bottom: 40px;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: #667EEA;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .card p {
+            color: #CBD5E0;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .card .features {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 20px;
+        }
+        
+        .card .features li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .card .features li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #FFD700;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        
+        .status.ready {
+            background: rgba(72, 187, 120, 0.2);
+            color: #48BB78;
+        }
+        
+        .status.testing {
+            background: rgba(246, 173, 85, 0.2);
+            color: #F6AD55;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>OpenClaw课程宣传演示文稿测试</h1>
+        <div class="subtitle">两套完整的HTML演示文稿，用于课程推广和展示</div>
+        
+        <div class="card-grid">
+            <a href="openclaw-course-promo-presentation.html" class="card" target="_blank">
+                <h2>基础版演示文稿 <span class="status ready">已就绪</span></h2>
+                <p>10页简洁演示，涵盖课程所有核心内容，适合快速展示和移动设备。</p>
+                <ul class="features">
+                    <li>10页完整内容展示</li>
+                    <li>响应式设计，多设备适配</li>
+                    <li>简洁现代的界面设计</li>
+                    <li>键盘和触摸导航支持</li>
+                    <li>粒子背景动画效果</li>
+                </ul>
+                <div class="btn">打开基础版演示</div>
+            </a>
+            
+            <a href="openclaw-course-promo-advanced.html" class="card" target="_blank">
+                <h2>高级版演示文稿 <span class="status ready">已就绪</span></h2>
+                <p>12页专业演示，丰富的视觉效果和交互体验，适合正式场合展示。</p>
+                <ul class="features">
+                    <li>12页专业级内容</li>
+                    <li>加载动画和进度指示</li>
+                    <li>卡片式布局设计</li>
+                    <li>完整的交互功能</li>
+                    <li>打印/PDF导出支持</li>
+                </ul>
+                <div class="btn">打开高级版演示</div>
+            </a>
+        </div>
+        
+        <div style="margin-top: 60px; padding: 30px; background: rgba(255, 255, 255, 0.05); border-radius: 20px;">
+            <h2>使用说明</h2>
+            <p><strong>导航方式：</strong></p>
+            <ul style="color: #CBD5E0; line-height: 1.8;">
+                <li><strong>键盘控制：</strong>左右箭头键翻页，PageUp/PageDown，Home/End跳转</li>
+                <li><strong>鼠标控制：</strong>点击导航按钮，使用滚轮翻页</li>
+                <li><strong>触摸控制：</strong>在手机/平板上水平滑动</li>
+                <li><strong>快捷键：</strong>F键全屏，ESC退出全屏，Ctrl+P打印</li>
+            </ul>
+            
+            <p><strong>浏览器兼容性：</strong></p>
+            <ul style="color: #CBD5E0; line-height: 1.8;">
+                <li>Chrome 90+ ✓</li>
+                <li>Firefox 88+ ✓</li>
+                <li>Safari 14+ ✓</li>
+                <li>Edge 90+ ✓</li>
+            </ul>
+            
+            <p><strong>文件信息：</strong></p>
+            <ul style="color: #CBD5E0; line-height: 1.8;">
+                <li>创建时间：2026年3月13日</li>
+                <li>技术栈：HTML5, CSS3, JavaScript (原生)</li>
+                <li>文件大小：基础版21KB，高级版35KB</li>
+                <li>许可证：MIT</li>
+            </ul>
+            
+            <div style="margin-top: 30px;">
+                <a href="README.md" class="btn" target="_blank">查看完整文档</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
